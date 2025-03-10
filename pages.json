@@ -1,0 +1,289 @@
+{
+	"pages": [
+		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path" : "pages/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "登录"
+			}
+		},
+		{
+			"path" : "pages/tabbar/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "首页"
+			}
+		},
+		{
+			"path" : "pages/tabbar/message",
+			"style" : 
+			{
+				"navigationBarTitleText" : "消息"
+			}
+		},
+		{
+			"path" : "pages/tabbar/my",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
+			"path" : "pages/opsReport",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运营快报"
+			}
+		},
+		{
+			"path" : "pages/slaesTask",
+			"style" : 
+			{
+				"navigationBarTitleText" : "销售任务"
+			}
+		},
+		{
+			"path" : "pages/memberManage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "会员管理"
+			}
+		},
+		{
+			"path" : "pages/protManagement",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商品管理"
+			}
+		},
+		{
+			"path" : "pages/usageStatis",
+			"style" : 
+			{
+				"navigationBarTitleText" : "使用统计"
+			}
+		},
+		{
+			"path" : "pages/staffCommission",
+			"style" : 
+			{
+				"navigationBarTitleText" : "店员提成"
+			}
+		},
+		{
+			"path" : "pages/promotionManage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "促销管理"
+			}
+		},
+		{
+			"path" : "pages/myStudy",
+			"style" : 
+			{
+				"navigationBarTitleText" : "大数据商品学习"
+			}
+		},
+		{
+			"path" : "pages/honor",
+			"style" : 
+			{
+				"navigationBarTitleText" : "荣耀殿堂"
+			}
+		},
+		{
+			"path" : "pages/courseTreatment",
+			"style" : 
+			{
+				"navigationBarTitleText" : "疗程用药"
+			}
+		},
+		{
+			"path" : "pages/goodsTask",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商品任务"
+			}
+		},
+		{
+			"path" : "pages/goosDetails",
+			"style" : 
+			{
+				"navigationBarTitleText" : "任务详情"
+			}
+		},
+		{
+			"path" : "pages/clerkShop",
+			"style" : 
+			{
+				"navigationBarTitleText" : "店员销售"
+			}
+		},
+		{
+			"path" : "pages/stockSerach",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商品库存查询"
+			}
+		},
+		{
+			"path" : "pages/stockScatter",
+			"style" : 
+			{
+				"navigationBarTitleText" : "库存分布"
+			}
+		},
+		{
+			"path" : "pages/prodSalse",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商品销售"
+			}
+		},
+		{
+			"path" : "pages/memberAnalysis",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商品会员查询"
+			}
+		},
+		{
+			"path" : "pages/aboutMembers",
+			"style" : 
+			{
+				"navigationBarTitleText" : "相关会员名单"
+			}
+		},
+		{
+			"path" : "pages/taskAllocation",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商品任务分配"
+			}
+		},
+		{
+			"path" : "pages/stockInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "片区库存概况"
+			}
+		},
+		{
+			"path" : "pages/storeStockInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "门店库存概况"
+			}
+		},
+		{
+			"path" : "pages/outStockManage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "断货管理"
+			}
+		},
+		{
+			"path" : "pages/newTopPrimary",
+			"style" : 
+			{
+				"navigationBarTitleText" : "新品排行"
+			}
+		},
+		{
+			"path" : "pages/newTopSecondary",
+			"style" : 
+			{
+				"navigationBarTitleText" : "新品排行"
+			}
+		},
+		{
+			"path" : "pages/dynamicSalesInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "片区动销概况"
+			}
+		},
+		{
+			"path" : "pages/dynamicSalesInfoStore",
+			"style" : 
+			{
+				"navigationBarTitleText" : "门店动销概括"
+			}
+		},
+		{
+			"path" : "pages/3-vid",
+			"style" : 
+			{
+				"navigationBarTitleText" : "3个月内效期管理"
+			}
+		},
+		{
+			"path" : "pages/6-vid",
+			"style" : 
+			{
+				"navigationBarTitleText" : "3-6个月内效期管理"
+			}
+		},
+		{
+			"path" : "pages/12-vid",
+			"style" : 
+			{
+				"navigationBarTitleText" : "6-12个月效期管理"
+			}
+		},
+		{
+			"path" : "pages/turnoverDays",
+			"style" : 
+			{
+				"navigationBarTitleText" : "周转天数"
+			}
+		},
+		{
+			"path" : "pages/highStockItems",
+			"style" : 
+			{
+				"navigationBarTitleText" : "高库存商品"
+			}
+		},
+		{
+			"path" : "pages/seriesChoose",
+			"style" : 
+			{
+				"navigationBarTitleText" : "分类选择"
+			}
+		}
+		
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"color": "#8F8F94",
+		"selectedColor": "#0055ff",
+		"list": [{
+				"pagePath": "pages/tabbar/index",
+				"iconPath": "static/img/tabbar/home.png",
+				"selectedIconPath": "static/img/tabbar/homeactive.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/message",
+				"iconPath": "static/img/tabbar/news.png",
+				"selectedIconPath": "static/img/tabbar/newsactive.png",
+				"text": "消息"
+			},
+			{
+				"pagePath": "pages/tabbar/my",
+				"iconPath": "static/img/tabbar/me.png",
+				"selectedIconPath": "static/img/tabbar/meactive.png",
+				"text": "我"
+			}
+		]
+	}
+}
