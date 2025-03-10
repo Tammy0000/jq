@@ -79,7 +79,7 @@
 							<text style="color: red;">{{imp_outrate}} % </text>
 						</view>
 						<view class="stock-context-show">
-							<text>重点品种断货率 </text>
+							<text>畅销品种断货率 </text>
 							<image src="../static/img/public/查看详情-右箭头.svg"></image>
 						</view>
 					</view>
@@ -90,7 +90,7 @@
 							<text style="color: red;">{{imp_goodscount}}</text>
 						</view>
 						<view class="stock-context-show">
-							<text>重点品种断货品规</text>
+							<text>畅销品种断货品规</text>
 							<image src="../static/img/public/查看详情-右箭头.svg"></image>
 						</view>
 					</view>
@@ -98,13 +98,14 @@
 				<view class="stock-context-series" @click="cli_stockInfo">
 					<view>
 						<view>
-							<text style="color: green;">3.5 % </text>
-							<text style="color: green; font-size: 5rpx;">环比</text>
-							<text style="color: green; font-size: 5rpx;"> -1.8%</text>
-							
+							<text v-if="!loadData_mle" >加载中...</text>
+							<text v-if="loadData_mle" style="color: green;">{{core_outrate}} % </text>
+							<!-- 此处注释留下次使用 -->
+							<!-- <text style="color: green; font-size: 5rpx;">环比</text>
+							<text style="color: green; font-size: 5rpx;"> -1.8%</text> -->
 						</view>
 						<view class="stock-context-show">
-							<text>30天平均断货率 </text>
+							<text>核心品种断货率 </text>
 							<image src="../static/img/public/查看详情-右箭头.svg"></image>
 						</view>
 					</view>
@@ -112,10 +113,11 @@
 				<view class="stock-context-series">
 					<view>
 						<view>
-							<text >162</text>
+							<text v-if="!loadData_mle" >加载中...</text>
+							<text v-if="loadData_mle" >{{core_goodscount}}</text>
 						</view>
 						<view class="stock-context-show">
-							<text>近30天周转天数 </text>
+							<text>核心品种断货品规 </text>
 							<image src="../static/img/public/查看详情-右箭头.svg"></image>
 						</view>
 					</view>
@@ -317,9 +319,10 @@
 			return;
 		}
 		
-		changeData(counter.storageId)
+		changeData(counter.placepointid)
 		changeData_goods(counter.placepointid)
 		changeData_goodsLKS(counter.placepointid)
+		changeData_goodsMLE(counter.placepointid)
 	})
 	
 	const counter = useCounterStore()
@@ -335,9 +338,13 @@
 	//最近30天日均销售成本额
 	const avg30money = ref(0)
 	const loadData = ref(false)
-	
+	//畅销品种品规以及断货率
 	const imp_outrate = ref(0)
 	const imp_goodscount = ref(0)
+	//核心品种品规以及断货率
+	const core_outrate = ref(0)
+	const core_goodscount = ref(0)
+	const loadData_mle = ref(false)
 	
 
     //监听状态管理的ID是否发生变化
@@ -348,14 +355,18 @@
 	watch(() => counter.placepointid, (newValue, oldValue) => {
 		changeData_goods(newValue)
 		changeData_goodsLKS(newValue)
+		changeData_goodsMLE(newValue)
 	})
 	
 	const changeData = async (Id) => {
 		stockmoney.value = 0
 		turnoverdays.value = 0
 		loadData.value = false
-		const res_turnoverdays = await requestFast.get('/app/goods/getMoneyAndTurnoverdays/v1/' + Id)
-		var _res = res_turnoverdays.data.根据保管账ID获取库存金额跟当前周转天数
+		const res_turnoverdays = await requestFast.post('/app/goods/getMoneyAndTurnoverdays/v1', {
+			placepointid: Id,
+			storageid: counter.storageId
+		})
+		var _res = res_turnoverdays.data.根据门店ID和保管账ID获取库存金额跟当前周转天数
 		stockmoney.value = _res.stockmoney
 		turnoverdays.value = _res.turnoverdays
 		loadData.value = true
@@ -374,12 +385,27 @@
 	}
 	
 	const changeData_goodsLKS = async (pid) => {
-		console.log('----')
 		const res = await requestFast.post('/app/goods/getLKSGoodsByPlacepointid/v1', {
 			placepointid: pid,
 			storageid: counter.storageId
 		})
-		console.log(res.data)
+		var _res = res.data.根据门店ID和保管账ID获取畅销品断货情况
+		imp_goodscount.value = _res.goodscount
+		imp_outrate.value = _res.outrate
+	}
+	
+	const changeData_goodsMLE = async (pid) => {
+		core_outrate.value = 0
+		core_goodscount.value = 0
+		loadData_mle.value = false
+		const res = await requestFast.post('/app/goods/getMLEGoodsByStorageid/v1', {
+			placepointid: pid,
+			storageid: counter.storageId
+		})
+		var _res = res.data.根据门店ID和保管账ID获取核心品断货情况
+		core_goodscount.value = _res.goodscount
+		core_outrate.value = _res.outrate
+		loadData_mle.value = true
 	}
 	
 	const showDataDra = () => {
