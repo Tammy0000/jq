@@ -1,6 +1,6 @@
 <template>
-	<view style="height: 100vh; background-color: #f5f5f5;">
-		<view style="width: 96%; margin: auto; ">
+	<view class="body">
+		<view class="container">
 			<view class="top_info">
 				<text style="color: #636363; text-decoration: underline; font-size: 33rpx;" @click="openDra">{{counter.storageName}}</text>
 				<view @click="logout">
@@ -200,7 +200,19 @@ import MyDra from '@/components/MyDra.vue';
 	}
 	
 	</script>
-<style>
+<style scoped>
+	.body {
+		width: 100vw;
+		height: 100vh;
+		display: grid;
+		justify-items: center;
+		background-color: #f5f5f5;
+	}
+	.container {
+		width: 94%;
+		
+	}
+	
 	.dataShow-s {
 		background-color: white;
 		/* margin-top: 20rpx; */
