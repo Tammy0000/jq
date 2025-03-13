@@ -22,9 +22,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+	import { ref } from 'vue';
+	import {onShow} from '@dcloudio/uni-app'
+	import { useCounterStore } from '../store/counter';
+	
+	onShow(async () => {
+		if (counter.isToken) {
+			uni.switchTab({
+				url:'/pages/tabbar/index'
+			})
+		}
+	})
+	
+	const counter = useCounterStore()
 	const user = ref('')
 	const password = ref('')
+	
 	
 	const login = () => {
 		if (user.value === '') {
@@ -63,6 +76,7 @@ import { ref } from 'vue';
 			icon:'success',
 			title:value,
 			success: () => {
+				counter.isToken = true
 				uni.switchTab({
 					url:'/pages/tabbar/index'
 				})

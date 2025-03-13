@@ -38,6 +38,8 @@
 </template>
 
 <script setup>
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	
 	const cli_ssi = () => {
 		uni.navigateTo({
 			url:'/pages/storeStockInfo'

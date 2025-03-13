@@ -1,16 +1,8 @@
 <template>
 	<view class="body">
 		<view class="context">
-			<view style="display: grid; grid-template-columns: 1fr 1fr;">
-				<view style="display: grid; grid-template-columns: auto auto auto; align-items: center;" @click="showDataDra">
-					<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-					<text style="font-size: 25rpx;">{{counter.storageName}}</text>
-					<image src="/static/img/public/向下实心箭头.svg" style="width: 30rpx; height: 30rpx;"></image>
-					<MyDra ref="showDra"></MyDra>
-				</view>
-				<view style="display: grid; justify-items: end;">
-					<text> 2025-02-18 </text>
-				</view>
+			<view>
+				<JqTopShowVue :showRight="true" @handle_Date="getDate"></JqTopShowVue>
 			</view>
 			<view style="display: grid; grid-template-columns: 1fr 1fr;">
 				<view style="display: grid; grid-template-columns: auto 1fr; gap: 10rpx; align-items: center;">
@@ -150,7 +142,7 @@
 						<text>总品规数</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx;">
-						<text style="color: green;">1897个</text>
+						<text style="color: green;">{{sum_goodscount}}个</text>
 					</view>
 				</view>
 				<view class="actveSales-title">
@@ -174,7 +166,7 @@
 						<text>30-90天不动销率</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx; align-items: center;">
-						<text style="color: red;">486 个</text>
+						<text style="color: red;">{{Bdxgoodscount_30_90}} 个</text>
 					</view>
 				</view>
 				<view class="actveSales-title">
@@ -182,7 +174,7 @@
 						<text>90-180天不动销率</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx; align-items: center;">
-						<text style="color: red;">287 个</text>
+						<text style="color: red;">{{Bdxgoodscount_90_180}} 个</text>
 					</view>
 				</view>
 				<view class="actveSales-title">
@@ -190,7 +182,7 @@
 						<text>180天不动销率</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx; align-items: center;">
-						<text style="color: red;">471 个</text>
+						<text style="color: red;">{{Bdxgoodscount_180}} 个</text>
 					</view>
 				</view>
 			</view>
@@ -312,20 +304,26 @@
 	import requestFast from '../utils/requestFast'
 	import MyDra from '../components/MyDra.vue'
 	import { useCounterStore } from '../store/counter'
+	import { getCurrentDate } from '../utils/dateUtils'
+	import JqTopShowVue from '../components/Jq-TopShow.vue'
 	
-	onShow(() => {
+	onShow( async () => {
+		selectDate.value = getCurrentDate()
 		//避免出现空加载页面去请求后台数据
 		if (counter.storageName === '请选择查询门店') {
 			return;
 		}
 		
-		changeData(counter.placepointid)
 		changeData_goods(counter.placepointid)
 		changeData_goodsLKS(counter.placepointid)
+		changeData_SumGoodscount(counter.placepointid)
 		changeData_goodsMLE(counter.placepointid)
+		changeData(counter.placepointid)
+		changeData_BDxGoodsCount(counter.placepointid)
 	})
 	
 	const counter = useCounterStore()
+	const selectDate = ref('')
 	const showDra = ref(null)
 	//库存金额
 	const stockmoney = ref(0)
@@ -343,6 +341,19 @@
 	const imp_goodscount = ref(0)
 	//核心品种品规以及断货率
 	const core_outrate = ref(0)
+	//总品规数
+	const sum_goodscount = ref(0)
+	//30天动销品规数
+	const dxgoodscount_per_30 = ref(0)
+	//90天动销品规数
+	const dxgoodscount_per_90 = ref(0)
+	//30-90天不动销率
+	const Bdxgoodscount_30_90 = ref(0)
+	//90-180天不动销率
+	const Bdxgoodscount_90_180 = ref(0)
+	//180天不动销率
+	const Bdxgoodscount_180 = ref(0)
+	
 	const core_goodscount = ref(0)
 	const loadData_mle = ref(false)
 	
@@ -352,11 +363,48 @@
 		changeData(newValue)
 	})
 	
-	watch(() => counter.placepointid, (newValue, oldValue) => {
+	watch(() => counter.placepointid,  (newValue, oldValue) => {
 		changeData_goods(newValue)
 		changeData_goodsLKS(newValue)
 		changeData_goodsMLE(newValue)
+		changeData_SumGoodscount(newValue)
+		changeData_DxGoodsCount(newValue)
+		changeData_BDxGoodsCount(newValue)
 	})
+	
+	const getDate = (date) => {
+		console.log(date)
+	}
+	
+	const changeData_BDxGoodsCount = async (Id) => {
+		Bdxgoodscount_30_90.value = await BDxGoodsCount(30, 90, Id)
+		Bdxgoodscount_90_180.value = await BDxGoodsCount(90, 180, Id)
+		Bdxgoodscount_180.value = await BDxGoodsCount(180, 0, Id)
+	}
+	
+	const BDxGoodsCount = async (start, end, Id) => {
+		var res = await requestFast.post('/app/goods/getBDXGoodscountByPlacepointid/v1', {
+			placepointid: Id,
+			storageid: counter.storageId,
+			startdays: start,
+			enddays: end
+		})
+		return res.data.根据门店ID和保管账ID和天数获取对应门店不动销品规数.goodscount
+	}
+	
+	const changeData_DxGoodsCount = async (Id) => {
+		var day30 = await DxGoodsCount(30, Id)
+		var day90 = await DxGoodsCount(90, Id)
+	}
+	
+	const DxGoodsCount = async (days, Id) => {
+		var res = await requestFast.post('/app/goods/getDXGoodscountByPlacepointid/v1', {
+			days: days,
+			placepointid: Id,
+			storageid: counter.storageId
+		})
+		return res.data.根据门店ID和保管账ID和天数获取对应门店动销品规数.goodscount
+	}
 	
 	const changeData = async (Id) => {
 		stockmoney.value = 0
@@ -370,6 +418,16 @@
 		stockmoney.value = _res.stockmoney
 		turnoverdays.value = _res.turnoverdays
 		loadData.value = true
+	}
+	
+	const changeData_SumGoodscount = async(pid) => {
+		sum_goodscount.value = 0
+		const res = await requestFast.post('/app/goods/getGoodscountByStorageid/v1', {
+			placepointid: pid,
+			storageid: counter.storageId
+		})
+		var _res = res.data.根据门店ID和保管账ID获取门店品规数
+		sum_goodscount.value = _res.goodscount
 	}
 	
 	const changeData_goods = async (pid) => {

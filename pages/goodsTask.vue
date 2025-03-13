@@ -1,18 +1,8 @@
 <template>
 	<view class="body">
 		<view class="container">
-			<view style="display: grid; grid-template-columns: auto auto auto;  gap: 10rpx;">
-				<view style="display: grid; grid-template-columns: auto auto auto; align-items: center;">
-					<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-					<text style="font-size: 30rpx;">广东健寿堂下郭分店</text>
-					<image src="/static/img/public/向下实心箭头.svg" style="width: 30rpx; height: 30rpx;"></image>
-				</view>
-				<view style="display: grid; justify-items: end;">
-					<text> 2025-02-18 </text>
-				</view>
-				<view>
-					<text style="color: #1388ee; text-decoration: underline;">店员选择</text>
-				</view>
+			<view style="width: 100%;">
+				<JqTopShowVue :showRight="true"></JqTopShowVue>
 			</view>
 			<view class="quantity-title">
 				<image src="../static/img/public/数量任务.svg" style="width: 50rpx; height: 50rpx;"></image>
@@ -91,6 +81,24 @@
 </template>
 
 <script setup>
+	import { ref } from 'vue';
+	import {onShow} from '@dcloudio/uni-app'
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import { useCounterStore } from '../store/counter';
+	import { getCurrentDate } from '../utils/dateUtils';
+	
+	onShow(async () => {
+		selectDate.value = getCurrentDate()
+	})
+	
+	const counter = useCounterStore()
+	const showDra = ref(null)
+	const selectDate = ref('')
+	
+	const showDraRef = () => {
+		showDra.value.openDra()
+	}
+	
 	const click_details = () => {
 		uni.navigateTo({
 			url:"/pages/goosDetails"
@@ -145,6 +153,7 @@
 	}
 	.container {
 		width: 94%;
+		padding-top: 25rpx;
 	}
 	.container > view:first-child {
 		margin: 20rpx 0;

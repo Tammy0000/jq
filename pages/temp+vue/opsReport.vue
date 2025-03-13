@@ -2,16 +2,14 @@
 	<view class="body">
 		<view class="container">
 			<view>
-				<view class="top-select-ops">
-					<view style="width: 100%; ">
-					    <JqTopShowVue :showRight="false"></JqTopShowVue>
+				<view class="top-select">
+					<view style="display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10rpx;">
+					    <image src="/static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
+					    <text style="color: #636363; text-decoration: underline;">化州市健寿堂下郭...</text>
 					</view>
-					<view style="display: grid; place-items: center;">
-						<text style="color: #1b8ffc; text-decoration: underline;" @click="showDrawer">数据条件</text>
-					</view>
+					<text style="color: #636363; text-decoration: underline;" @click="showDrawer">数据条件</text>
 				</view>
 				<view>
-					<MyDraVue ref="showDraRef"></MyDraVue>
 					<uni-drawer ref="showRight" mode="right" :mask-click="false">
 						<scroll-view style="height: 100%;" scroll-y="true">
 							<view>
@@ -79,86 +77,86 @@
 					</view>
 				</view>
 			</view>
-				<view style="margin-top: 15rpx; display: grid; grid-auto-flow: column; overflow-x: auto;">
-					<view class="horiz-context">
-						<view style="margin-top: 15rpx;" @click="cli_slaesTask">
-							<text>累计完成率</text>
-							<text style="color: red; margin-left: 0.5em;">31</text>
-							<text style="color: red;">%</text>
-						</view>
-						<view style="margin-top: 15rpx;">
-							<text>片区排名</text>
-							<text style="color: green; margin-left: 0.5em;">17</text>
-							<image src="/static/img/public/提升箭头.svg" style="width: 20rpx; height: 25rpx;"></image>
-							<text style="color: green;">%</text>
-						</view>
+			<view style="margin-top: 15rpx; display: grid; grid-auto-flow: column;">
+				<view class="horiz-context">
+					<view style="margin-top: 15rpx;" @click="cli_slaesTask">
+						<text>累计完成率</text>
+						<text style="color: red; margin-left: 0.5em;">31</text>
+						<text style="color: red;">%</text>
 					</view>
-					<view class="horiz-context" @click="cli_slaesTask">
-						<view style="margin-top: 15rpx;">
-							<text>
-								月预计完成率
-							</text>
-							<text style="color: red; margin-left: 0.4em;">34</text>
-							<text style="color: red;">%</text>
-						</view>
-						<view style="margin-top: 15rpx;">
-							<text>片区排名</text>
-							<text style="color: red; margin-left: 0.4em;">18</text>
-							<image src="/static/img/public/下降箭头.svg" style="width: 20rpx; height: 25rpx;"></image>
-							<text style="color: red;">%</text>
-						</view>
-					</view>
-					<view class="horiz-context">
-						<view @click="cli_slaesTask">
-							<text>月预计完成</text>
-							<text style="color: red;">18428</text>
-							<text>元</text>
-						</view>
-						<view @click="cli_slaesTask">
-							<text>距目标差</text>
-							<text style="color: red;">36572</text>
-							<text>元</text>
-						</view>
-					</view>
-					<view class="horiz-context" @click="cli_slaesTask">
-						<view>
-							<text>来客数</text>
-							<text style="color: red;">7</text>
-							<text>人</text>
-						</view>
-						<view>
-							<text>目标</text>
-							<text>15</text>
-							<text>人</text>
-						</view>
-					</view>
-					<view class="horiz-context" @click="cli_slaesTask">
-						<view>
-							<text>客单价</text>
-							<text style="color: red;">15.8</text>
-							<text>元</text>
-						</view>
-						<view>
-							<text>目标</text>
-							<text>80.0</text>
-							<text>元</text>
-						</view>
-					</view>
-					<view class="horiz-context" @click="cli_slaesTask">
-						<view>
-							<text>毛利率</text>
-							<text style=":color: green;">45.3</text>
-							<text>%</text>
-						</view>
-						<view>
-							<text>
-								目标
-							</text>
-							<text>40</text>
-							<text>%</text>
-						</view>
+					<view style="margin-top: 15rpx;">
+						<text>片区排名</text>
+						<text style="color: green; margin-left: 0.5em;">17</text>
+						<image src="/static/img/public/提升箭头.svg" style="width: 20rpx; height: 25rpx;"></image>
+						<text style="color: green;">%</text>
 					</view>
 				</view>
+				<view class="horiz-context" @click="cli_slaesTask">
+					<view style="margin-top: 15rpx;">
+						<text>
+							月预计完成率
+						</text>
+						<text style="color: red; margin-left: 0.4em;">34</text>
+						<text style="color: red;">%</text>
+					</view>
+					<view style="margin-top: 15rpx;">
+						<text>片区排名</text>
+						<text style="color: red; margin-left: 0.4em;">18</text>
+						<image src="/static/img/public/下降箭头.svg" style="width: 20rpx; height: 25rpx;"></image>
+						<text style="color: red;">%</text>
+					</view>
+				</view>
+				<view class="horiz-context">
+					<view @click="cli_slaesTask">
+						<text>月预计完成</text>
+						<text style="color: red;">18428</text>
+						<text>元</text>
+					</view>
+					<view @click="cli_slaesTask">
+						<text>距目标差</text>
+						<text style="color: red;">36572</text>
+						<text>元</text>
+					</view>
+				</view>
+				<view class="horiz-context" @click="cli_slaesTask">
+					<view>
+						<text>来客数</text>
+						<text style="color: red;">7</text>
+						<text>人</text>
+					</view>
+					<view>
+						<text>目标</text>
+						<text>15</text>
+						<text>人</text>
+					</view>
+				</view>
+				<view class="horiz-context" @click="cli_slaesTask">
+					<view>
+						<text>客单价</text>
+						<text style="color: red;">15.8</text>
+						<text>元</text>
+					</view>
+					<view>
+						<text>目标</text>
+						<text>80.0</text>
+						<text>元</text>
+					</view>
+				</view>
+				<view class="horiz-context" @click="cli_slaesTask">
+					<view>
+						<text>毛利率</text>
+						<text style=":color: green;">45.3</text>
+						<text>%</text>
+					</view>
+					<view>
+						<text>
+							目标
+						</text>
+						<text>40</text>
+						<text>%</text>
+					</view>
+				</view>
+			</view>
 			<view class="task-context">
 				<view class="ranking-top">
 					<text>销售榜</text>
@@ -291,22 +289,14 @@
 
 <script setup>
 	import { computed, ref } from 'vue';
-	import JqTopShowVue from '../components/Jq-TopShow.vue';
-	import { useCounterStore } from '../store/counter';
 
-	const counter = useCounterStore()
 	const showRight = ref(null)
 	const selectDate = ref('')
 	const selecrIndex = ref(1)
-	const showDraRef = ref(null)
 	
 	const rust = computed(() => {
 		
 	})
-	
-	const showDra = () => {
-		showDraRef.value.openDra()
-	}
 	
 	const selectDate_ref = (index) => {
 		if (selecrIndex.value === index) return
@@ -347,11 +337,6 @@
 </script>
 
 <style scoped>
-	.top-select-ops{
-		display: grid;
-		grid-template-columns: 3fr 1fr;
-		width: 100%;
-	}
 	.selectTimeKeyWord > view {
 		width: 100%;
 		display: grid;

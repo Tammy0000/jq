@@ -216,4 +216,25 @@
 		display: flex;
 		justify-content: center;
 	}
+</style>align-items: center;
+		gap: 10rpx;
+	}
+	.itop {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: center;
+	}
+	.container > view {
+		margin-top: 25rpx;
+	}
+	.container {
+		width: 94%;
+	}
+	.body {
+		background-color: #f5f5f5;
+		height: 100vh;
+		width: 100vw;
+		display: flex;
+		justify-content: center;
+	}
 </style>

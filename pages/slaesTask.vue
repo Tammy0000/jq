@@ -3,13 +3,15 @@
 		<view class="context">
 			<view>
 				<view class="top-select">
-					<view style="display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10rpx;">
-					    <image src="/static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-					    <text style="color: aquamarine; text-decoration: underline;">化州市健寿堂下郭...</text>
+					<view style="width: 100%;">
+					    <JqTopShowVue :showRight="false"></JqTopShowVue>
 					</view>
-					<text style="color: aqua; text-decoration: underline;" @click="showDrawer">数据条件</text>
+					<view style="display: grid; align-items: center;">
+						<text style="text-decoration: underline; font-size: 30rpx; color: #1d8fff;" @click="showDrawer">数据条件</text>
+					</view>
 				</view>
 				<view>
+					<MyDraVue ref="showMyDra"></MyDraVue>
 					<uni-drawer ref="showRight" mode="right" :mask-click="false">
 						<scroll-view style="height: 100%;" scroll-y="true">
 							<view>
@@ -34,11 +36,19 @@
 				</view>
 				<view>
 					<view>
-						<uni-datetime-picker type="date" border="falxe" placeholder="选择当前时间"></uni-datetime-picker>
-						<view style="display: grid; width: 30%; grid-template-columns: repeat(3, 1fr); margin-top: 25rpx;">
-							<text style="color: #5da4e3;">日</text>
-							<text>周</text>
-							<text>年</text>
+						<view style="margin: 15rpx 0;">
+							<uni-datetime-picker type="date" v-model="selectDate" >{{selectDate == '' ? '请选择时间' : selectDate}}</uni-datetime-picker>
+						</view>
+						<view class="selectTimeKeyWord">
+							<view @click="selectDate_ref(1)" :class="selecrIndex === 1 ? 'selectColor-Active' : 'selectColor'">
+								<text>日</text>
+							</view>
+							<view @click="selectDate_ref(2)" :class="selecrIndex === 2 ? 'selectColor-Active' : 'selectColor'">
+								<text>月</text>
+							</view>
+							<view @click="selectDate_ref(3)" :class="selecrIndex === 3 ? 'selectColor-Active' : 'selectColor'">
+								<text>年</text>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -134,19 +144,55 @@
 
 <script setup>
 	import { ref } from 'vue';
+	import { useCounterStore } from '../store/counter';
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
 	
-		const showRight = ref(null)
-		
-		const showDrawer = () => {
-			showRight.value.open()
-		}
-		
-		const closeDrawer = () => {
-			showRight.value.close()
-		}
+	const showRight = ref(null)
+	const counter = useCounterStore()
+	const showMyDra = ref(null)
+	const selectDate = ref('')
+	const selecrIndex = ref(1)
+	
+	const showMyDraRef = () => {
+		showMyDra.value.openDra()
+	}
+	
+	const selectDate_ref = (index) => {
+		if (selecrIndex.value === index) return
+		selecrIndex.value = index
+	}
+	
+	const showDrawer = () => {
+		showRight.value.open()
+	}
+	
+	const closeDrawer = () => {
+		showRight.value.close()
+	}
 </script>
 
 <style scoped>
+	.selectTimeKeyWord > view {
+		width: 100%;
+		display: grid;
+		place-items: center;
+	}
+	.selectColor-Active {
+		background-color: #f5f5f5;
+		color: #1b8ffc;
+		width: 100%;
+	}
+	.selectColor {
+		background-color: #a3a3a3;
+		width: 100%;
+	}
+	.selectTimeKeyWord {
+		display: grid; 
+		width: 30%;
+		 place-items: center;
+		grid-template-columns: repeat(3, 1fr);
+		background-color: #a3a3a3;
+	}
 	.opera-analyis {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -208,6 +254,7 @@
 	.context {
 		width: 94%;
 		margin: auto;
+		padding-top: 15rpx;
 		/* border: 1rpx solid greenyellow; */
 	}
 	.drawer-font {
@@ -223,8 +270,6 @@
 	}
 	.top-select {
 		display: grid;
-		grid-template-columns: auto auto;
-		justify-content: space-between;
-		margin-top: 15rpx;
+		grid-template-columns: 1fr auto;
 	}
 </style>

@@ -2,9 +2,11 @@
 	<view class="body">
 		<view class="container">
 			<view class="top_info">
-				<text style="color: #636363; text-decoration: underline; font-size: 33rpx;" @click="openDra">{{counter.storageName}}</text>
-				<view @click="logout">
-					<text style="font-size: 33rpx; color: #636363;">用户 : admin </text>
+				<view>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view @click="logout" style="justify-self: end;">
+					<text style="font-size: 30rpx; color: #1d8fff;">用户 : admin </text>
 				</view>
 			</view>
 			<uni-drawer :mask="true" mode="left" ref="showDrawer">
@@ -84,11 +86,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import {onShow} from '@dcloudio/uni-app'
-import { useCounterStore } from '@/store/counter';
-import requestFast from '../../utils/requestFast'; 
-import MyDra from '@/components/MyDra.vue';
+	import { ref } from 'vue';
+	import {onShow} from '@dcloudio/uni-app'
+	import { useCounterStore } from '@/store/counter';
+	import requestFast from '../../utils/requestFast';
+	import JqTopShowVue from '@/components/Jq-TopShow.vue';
 
 	const name = ref('admin')
 	const showDayMessage = ref(false)
@@ -100,6 +102,7 @@ import MyDra from '@/components/MyDra.vue';
 	onShow (async () => {
 		if (counter.storageId === '' || counter.storageName === '') {
 			const res = await requestFast.get('/app/placepoint/getAllPlacepoint/v1')
+			//这里的索引21是可以后台传过来的数据，不作特别要求
 			counter.storageName = res.data.获取所有门店信息[21].storagename
 			counter.storageId = res.data.获取所有门店信息[21].storageid
 			counter.placepointid = res.data.获取所有门店信息[21].placepointid
@@ -124,6 +127,7 @@ import MyDra from '@/components/MyDra.vue';
 		uni.showModal({
 			content:'是否退出?',
 			success: (res) => {
+				counter.isToken = false
 				if (res.confirm) {
 					uni.redirectTo({
 						url:'/pages/login'
@@ -272,7 +276,7 @@ import MyDra from '@/components/MyDra.vue';
 	}
 	.top_info {
 		display: grid; 
-		grid-template-columns: 1fr auto; 
+		grid-template-columns: 3fr 2fr; 
 		justify-content: space-between;
 		margin-top: 15rpx;
 	}

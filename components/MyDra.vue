@@ -4,7 +4,9 @@
 			<scroll-view style="height: 100%; width: 100%;" scroll-y="true">
 				<view style="display: grid; grid-template-rows: auto;">
 					<view :class="key % 2 == 0 ? 'dataShow-s' : 'dataShow-m' " v-for="(value, key) in dataStoredetail" :key="key" @click="closeDra(key)">
-						<text>{{value.storagename}}</text>
+						<view style="width: 80%;">
+							<text style="font-size: 25rpx;">{{value.storagename}}</text>
+						</view>
 					</view>
 				</view>
 			</scroll-view>
@@ -31,6 +33,8 @@ import { useCounterStore } from '@/store/counter';
 		counter.storageName = dataStoredetail.value[index].storagename
 		counter.storageId = dataStoredetail.value[index].storageid
 		counter.placepointid = dataStoredetail.value[index].placepointid
+		// console.log('storageid: ' + dataStoredetail.value[index].storageid)
+		// console.log('placepointid：' + dataStoredetail.value[index].placepointid)
 		showDrawer.value.close()
 	}
 	
@@ -45,7 +49,6 @@ import { useCounterStore } from '@/store/counter';
 <style scoped>
 	.dataShow-s {
 		background-color: white;
-		/* margin-top: 20rpx; */
 		height: 150rpx;
 		width: 100%;
 		display: grid;
@@ -54,7 +57,6 @@ import { useCounterStore } from '@/store/counter';
 	
 	.dataShow-m {
 		background-color: #f5f5f5;
-		/* margin-top: 20rpx; */
 		height: 150rpx;
 		width: 100%;
 		display: grid;

@@ -2,19 +2,17 @@
 	<view class="body">
 		<view class="context" >
 			<view class="top-time">
-				<view style="display: grid; grid-template-columns: 1fr auto; gap: 5rpx; align-items: center;">
-					<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-					<text style="text-decoration: underline; color: #2b8ada;">化州下郭健寿堂</text>
+				<view >
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
 				</view>
 				<view>
-					<text style="color: #2b8ada;">2025-02-18</text>
-				</view>
-				<view>
-					<text style="color: #2b8ada;">日 </text>
-					<text> 周 </text>
-					<text> 年 </text>
+					<uni-datetime-picker type="date" v-model="showSelectDate" style="color: #2b8ada;">{{showSelectDate}}</uni-datetime-picker>
 				</view>
 			</view>
+			<view style="width: 80%;">
+					
+			</view>
+			<MyDraVue ref="showDra"></MyDraVue>
 			<view style="display: grid; grid-template-columns: 3fr 1fr; margin: 25rpx 0;">
 				<view class="title-img">
 					<image src="/static/img/menu/会员概况.svg" style="width: 50rpx; height: 50rpx;"></image>
@@ -159,6 +157,25 @@
 </template>
 
 <script setup>
+	import { ref } from 'vue';
+	import {onShow} from '@dcloudio/uni-app'
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import { useCounterStore } from '../store/counter';
+	import { getCurrentDate } from '../utils/dateUtils';
+	
+	onShow(async () => {
+		showSelectDate.value = getCurrentDate()
+	})
+	
+	const showDra = ref(null)
+	const counter = useCounterStore()
+	const showSelectDate = ref('')
+	
+	
+	const showDraRef = () => {
+		showDra.value.openDra()
+	}
+	
 </script>
 
 <style scoped>
@@ -239,10 +256,11 @@
     .context {
 		width: 94%;
 		margin: auto;
+		padding-top: 25rpx;
 	}
 	.top-time {
 		display: grid;
-		grid-template-columns: auto 1fr 1fr;
+		grid-template-columns: 2fr 1fr;
 		align-items: center;
 		place-items: center;
 	}

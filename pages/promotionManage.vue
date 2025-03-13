@@ -1,15 +1,8 @@
 <template>
 	<view class="body">
 		<view class="context">
-			<view style="display: grid; grid-template-columns: 1fr 1fr;">
-				<view style="display: grid; grid-template-columns: auto auto auto; align-items: center;">
-					<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-					<text style="font-size: 15rpx;">广东健寿堂下郭分店</text>
-					<image src="/static/img/public/向下实心箭头.svg" style="width: 30rpx; height: 30rpx;"></image>
-				</view>
-				<view style="display: grid; justify-items: end;">
-					<text> 2025-02-18 </text>
-				</view>
+			<view style="width: 100%;">
+				<JqTopShowVue :showRight="true"></JqTopShowVue>
 			</view>
 			<!-- 促销日历 -->
 			<view style="display: grid; grid-template-columns: 1fr 1fr;">
@@ -87,6 +80,7 @@
 </template>
 
 <script setup>
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
 	
 </script>
 
