@@ -1,8 +1,13 @@
 <template>
 	<view class="body">
 		<view class="content">
-			<view style="width: 100%;">
-				<JqTopShowVue :showRight="true"></JqTopShowVue>
+			<view style="width: 100%; display: grid; grid-template-columns: 3fr 1fr; align-items: center;">
+				<view>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view>
+					<JqSelectDateVue :showSingel="true" fontSize="30rpx"></JqSelectDateVue>
+				</view>
 			</view>
 			<view style="display: grid; grid-template-columns: 1fr 1fr;">
 				<view style="display: grid; grid-template-columns: auto 1fr; gap: 10rpx; align-items: center;">
@@ -184,6 +189,7 @@
 <script setup>
 	import { ref } from 'vue';
 	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
 	
 </script>
 

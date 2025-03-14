@@ -1,8 +1,13 @@
 <template>
 	<view class="body">
 		<view class="context">
-			<view style="width: 100%;">
-				<JqTopShowVue :showRight="true"></JqTopShowVue>
+			<view style="width: 100%; display: grid; grid-template-columns: 3fr 1fr; align-items: center;">
+				<view>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view>
+					<jq-select-date-vue :showSingel="true"></jq-select-date-vue>
+				</view>
 			</view>
 			<!-- 促销日历 -->
 			<view style="display: grid; grid-template-columns: 1fr 1fr;">
@@ -81,6 +86,7 @@
 
 <script setup>
 	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
 	
 </script>
 

@@ -1,8 +1,13 @@
 <template>
 	<view class="body">
 		<view class="context">
-			<view style="width: 100%;">
-				<JqTopShowVue :showRight="true"></JqTopShowVue>
+			<view style="width: 100%; display: grid; grid-template-columns: 3fr 1fr; align-items: center;">
+				<view>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view>
+					<JqSelectDateVue :showSingel="true"></JqSelectDateVue>
+				</view>
 			</view>
 			<view>
 				<text>此功能数据仅供参考用于促进提成商品销售</text>
@@ -77,6 +82,7 @@
 		import { getCurrentDate } from '../utils/dateUtils';
 		import { useCounterStore } from '../store/counter';
 		import JqTopShowVue from '../components/Jq-TopShow.vue';
+		import JqSelectDateVue from '../components/Jq-Select-Date.vue';
 		
 		onShow(async () => {
 			selectDate.value = getCurrentDate()

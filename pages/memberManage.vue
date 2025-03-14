@@ -6,7 +6,7 @@
 					<JqTopShowVue :showRight="false"></JqTopShowVue>
 				</view>
 				<view>
-					<uni-datetime-picker type="date" v-model="showSelectDate" style="color: #2b8ada;">{{showSelectDate}}</uni-datetime-picker>
+					<JqSelectDateVue :showSingel="true"></JqSelectDateVue>
 				</view>
 			</view>
 			<view style="width: 80%;">
@@ -160,6 +160,7 @@
 	import { ref } from 'vue';
 	import {onShow} from '@dcloudio/uni-app'
 	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
 	import { useCounterStore } from '../store/counter';
 	import { getCurrentDate } from '../utils/dateUtils';
 	
@@ -260,9 +261,8 @@
 	}
 	.top-time {
 		display: grid;
-		grid-template-columns: 2fr 1fr;
+		grid-template-columns: 3fr 1fr;
 		align-items: center;
-		place-items: center;
 	}
 	.top-time > view {
 		margin-right: 15rpx;

@@ -1,8 +1,13 @@
 <template>
 	<view class="body">
 		<view class="container">
-			<view style="width: 100%;">
-				<JqTopShowVue :showRight="true"></JqTopShowVue>
+			<view style="width: 100%; display: grid; grid-template-columns: 3fr 1fr;align-items: center;">
+				<view>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view>
+					<jq-select-date-vue :showSingel="true"></jq-select-date-vue>
+				</view>
 			</view>
 			<view class="quantity-title">
 				<image src="../static/img/public/数量任务.svg" style="width: 50rpx; height: 50rpx;"></image>
@@ -84,6 +89,7 @@
 	import { ref } from 'vue';
 	import {onShow} from '@dcloudio/uni-app'
 	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
 	import { useCounterStore } from '../store/counter';
 	import { getCurrentDate } from '../utils/dateUtils';
 	

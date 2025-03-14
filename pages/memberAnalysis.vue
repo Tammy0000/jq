@@ -3,15 +3,10 @@
 		<view class="container">
 			<view class="top-title">
 				<view>
-					<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
+					<jq-top-show-vue :showRight="false"></jq-top-show-vue>
 				</view>
 				<view>
-					<text style="font-size: 25rpx;">广东健寿堂下郭分店保管账</text>
-				</view>
-				<view>
-					<text style="color: #3188d4;">2025-01-01</text>
-					<text>至</text>
-					<text style="color: #3188d4;">2025-01-31</text>
+					<jq-select-date-vue></jq-select-date-vue>
 				</view>
 			</view>
 			<view class="serachData">
@@ -76,7 +71,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+	import { ref } from 'vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	
 	const prot = ref("请勾选需要查询的商品")
 	const picSrc = ref("../static/img/public/搜索-未激活.svg")
 	const prot_css = ref("#aaaaaa")
@@ -148,9 +146,7 @@ import { ref } from 'vue';
 	}
 	.top-title {
 		display: grid;
-		grid-template-columns: auto auto auto;
-		gap: 5rpx;
-		width: 100%;
+		grid-template-columns: 3fr 2.5fr;
 		align-items: center;
 	}
 	.container > view:first-child {

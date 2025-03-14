@@ -3,13 +3,10 @@
 		<view class="container">
 			<view class="itop">
 				<view>
-					<Icon src="../static/img/public/门店.svg" @click="showData" fontSize="30rpx"></Icon>
-					<MyDra ref="showDra"></MyDra>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
 				</view>
-				<view class="itop-time">
-					<text>2025-01-01</text>
-					<text> 至 </text>
-					<text>2025-01-31</text>
+				<view>
+					<JqSelectDateVue></JqSelectDateVue>
 				</view>
 			</view>
 			<view class="series-data">
@@ -49,7 +46,8 @@
 
 <script setup>
 	import { ref } from 'vue';
-	import MyDra from '../components/MyDra.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
 	import Icon from '../components/icon.vue'
 	import { useCounterStore } from '../store/counter';
 	import {onShow} from '@dcloudio/uni-app'
@@ -104,7 +102,7 @@
 	}
 	.itop {
 		display: grid;
-		grid-template-columns: 1fr auto;
+		grid-template-columns: auto auto;
 		align-items: center;
 	}
 	.container > view {

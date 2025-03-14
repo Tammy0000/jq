@@ -1,13 +1,12 @@
 <template>
 	<view class="body">
 		<view class="container">
-			<view style="width: 100%;">
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #666666;">健寿堂直营店</text>
-				<view >
-					<text style="color: #b4b4b4;">2025-01-01</text>
-					<text>至</text>
-					<text style="color: #b4b4b4;">2025-01-31</text>
+			<view>
+				<view style="width: 100%;">
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view style="width: 100%;">
+					<JqSelectVue fontSize="25rpx"></JqSelectVue>
 				</view>
 			</view>
 			<view>
@@ -39,6 +38,7 @@
 
 <script setup>
 	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectVue from '../components/Jq-Select-Date.vue'
 	
 	const cli_ssi = () => {
 		uni.navigateTo({

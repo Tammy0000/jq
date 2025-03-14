@@ -2,8 +2,7 @@
 	<view class="body">
 		<view class="container">
 			<view>
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="#666666">广东健寿堂下郭分店保管账</text>
+				<JqTopShowVue :showRight="false"></JqTopShowVue>
 			</view>
 			<view>
 				<view class="dateHistory dh" style="background-color: #e2eefc;">
@@ -26,7 +25,7 @@
 </template>
 
 <script setup>
-	
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
 </script>
 
 <style scoped>

@@ -2,13 +2,14 @@
 	<view class="body">
 		<view class="container">
 			<view class="top-title">
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #b6b6b6; font-size: 20rpx;">广东健寿堂下郭分店</text>
-				<view>
-					<text style="color: #1d8ee9; font-size: 20rpx;">2025-01-01</text>
-					<text>至</text>
-					<text style="color: #1d8ee9; font-size: 20rpx;">2025-01-31</text>
-				</view>
+					<view>
+						<jq-top-show-vue :showRight="false"></jq-top-show-vue>
+					</view>
+					<view>
+						<JqSelectDateVue></JqSelectDateVue>
+					</view>
+			</view>
+			<view>
 				<text style="text-decoration: underline; color: #1d8ee9;">数据条件</text>
 			</view>
 			<view class="serach-data">
@@ -107,6 +108,8 @@
 </template>
 
 <script setup>
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
 	
 </script>
 
@@ -168,9 +171,8 @@
 		gap: 10%;
 	}
 	.top-title {
-		grid-template-columns: repeat(4, auto);
+		grid-template-columns: repeat(2, auto);
 		display: grid;
-		gap: 5rpx;
 		align-items: center;
 	}
 	.container > view:first-child {

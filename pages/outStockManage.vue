@@ -2,18 +2,17 @@
 	<view class="body">
 		<view class="container">
 			<view>
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #30b6ff; text-decoration: underline;">健寿堂直营店</text>
-				<view style="justify-self: end;">
-					<text style="color: #b4b4b4;">2025-01-01</text>
-					<text>至</text>
-					<text style="color: #b4b4b4;">2025-01-31</text>
+				<view>
+					<jq-top-show-vue :showRight="false"></jq-top-show-vue>
+				</view>
+				<view>
+					<jq-select-date-vue></jq-select-date-vue>
 				</view>
 			</view>
 			<view>
 				<view class="dataShow-title">
-					<text style="color: #30b6ff; text-decoration: underline;">重点商品</text>
-					<text>其他商品</text>
+					<text :class="selectIndex === 1 ? 'selectGoods' : ''" @click="selectTab(1)">重点商品</text>
+					<text :class="selectIndex === 2 ? 'selectGoods' : ''" @click="selectTab(2)">其他商品</text>
 				</view>
 				<view class="dataShow" style="background-color: #e2eefc;">
 					<text>序号</text>
@@ -41,6 +40,17 @@
 </template>
 
 <script setup>
+	import {ref} from 'vue'
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	
+	const selectIndex =  ref(1)
+	
+	const selectTab = (index) => {
+		if (selectIndex.value === index) return
+		selectIndex.value = index
+	}
+	
 	const stockInfo = () => {
 		event.stopPropagation();
 		uni.showModal({
@@ -58,6 +68,12 @@
 </script>
 
 <style scoped>
+	.selectGoods {
+		color: #30b6ff; 
+		text-decoration: underline; 
+		text-decoration-thickness: 8rpx; 
+		text-underline-offset: 10rpx;
+	}
 	.dataShow > text {
 		font-size: 25rpx;
 	}

@@ -5,7 +5,7 @@
 				<uni-datetime-picker type="date" :style="`font-size: ${fontSize};color: ${color}`" @change="changeDate($event, 0)">{{startDate}}</uni-datetime-picker>
 			</view>
 			<view v-if="!showSingel">
-				<text :style="`font-size: ${fontSize}; color: ${color}`"> 至 </text>
+				<text :style="`font-size: ${fontSize}; color: ${color}`">至</text>
 			</view>
 			<view v-if="!showSingel">
 				<uni-datetime-picker :start="startDate" type="date" :style="`font-size: ${fontSize};color: ${color}`" @change="changeDate($event, 1)">{{endDate}}</uni-datetime-picker>
@@ -68,8 +68,7 @@
 <style scoped>
 	.itop-time {
 		display: grid;
-		grid-template-columns: auto 1fr auto;
+		grid-template-columns: auto auto auto;
 		align-items: center;
-		gap: 10rpx;
 	}
 </style>

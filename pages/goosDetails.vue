@@ -3,18 +3,10 @@
 		<view class="container">
 			<view class="top-title">
 				<view>
-					<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
 				</view>
 				<view>
-					<text>化州市下郭健寿堂</text>
-				</view>
-				<view>
-					<text style="color: #1d93f9;">2025-01-01</text>
-					<text>至</text>
-					<text style="color: #1d93f9;">2025-02-24</text>
-				</view>
-				<view>
-					<text style="color: #1d93f9; text-decoration: underline;">店员选择</text>
+					<JqSelectDateVue></JqSelectDateVue>
 				</view>
 			</view>
 			<view class="series-data">
@@ -78,6 +70,9 @@
 </template>
 
 <script setup>
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	
 	const showInfo = (e) => {
 		e.stopPropagation();
 		uni.showModal({
@@ -124,10 +119,9 @@
 	}
 	.top-title {
 		display: grid;
-		grid-template-columns: repeat(4, auto);
-		gap: 25rpx;
+		grid-template-columns: auto auto;
+		width: 100%;
 		align-items: center;
-		height: 80rpx;
 	}
 	.container > view:first-child {
 		margin-top: 20rpx;

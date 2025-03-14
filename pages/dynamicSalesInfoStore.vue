@@ -1,11 +1,12 @@
 <template>
 	<view class="body">
 		<view class="container">
-			<view style="width: 100%;">
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #666666;">A区</text>
-				<view style="justify-self: end;">
-					<text style="color: #1c90ff;">2025-01-01</text>
+			<view style="width: 100%; display: grid; grid-template-columns: 3fr 1fr; ">
+				<view>
+					<jq-top-show-vue :showRight="false"></jq-top-show-vue>
+				</view>
+				<view style="">
+					<jq-select-date-vue :showSingel="true"></jq-select-date-vue>
 				</view>
 			</view>
 			<view>
@@ -33,6 +34,8 @@
 </template>
 
 <script setup>
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
 	
 </script>
 

@@ -2,12 +2,11 @@
 	<view class="body">
 		<view class="container">
 			<view>
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #30b6ff; text-decoration: underline;">A区</text>
-				<view style="justify-self: end;">
-					<text style="color: #b4b4b4;">2025-01-01</text>
-					<text>至</text>
-					<text style="color: #b4b4b4;">2025-01-31</text>
+				<view>
+					<jq-top-show-vue :showRight="false"></jq-top-show-vue>
+				</view>
+				<view>
+					 <jq-select-date-vue></jq-select-date-vue>
 				</view>
 			</view>
 			<view>
@@ -29,6 +28,9 @@
 </template>
 
 <script setup>
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	
 	const cli_osm = () => {
 		uni.navigateTo({
 			url:'/pages/outStockManage'

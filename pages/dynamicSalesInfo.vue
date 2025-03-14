@@ -1,11 +1,12 @@
 <template>
 	<view class="body">
 		<view class="container">
-			<view style="width: 100%;">
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #666666;">健寿堂直营店</text>
-				<view style="justify-self: end;">
-					<text style="color: #1c90ff;">2025-01-01</text>
+			<view style="width: 100%;display: grid;grid-template-columns: 3fr 1fr;">
+				<view>
+					<JqTopShowVue :showRight="false"></JqTopShowVue>
+				</view>
+				<view>
+					<JqSelectDateVue :showSingel="true"></JqSelectDateVue>
 				</view>
 			</view>
 			<view>
@@ -36,6 +37,9 @@
 </template>
 
 <script setup>
+	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import JqSelectDateVue from '../components/Jq-Select-Date.vue';
+	
 	const cli_storeSales = () => {
 		uni.navigateTo({
 			url:'/pages/dynamicSalesInfoStore'
