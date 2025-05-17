@@ -18,7 +18,7 @@
 					</view>
 				</scroll-view>
 			</uni-drawer>
-			<MyDra ref="showTest"></MyDra>
+			<!-- <MyDra ref="showTest"></MyDra> -->
 			<view class="menu">
 				<view>
 					<view class="menu-context" @click="click_opsReport">
@@ -87,10 +87,11 @@
 
 <script setup>
 	import { ref } from 'vue';
-	import {onShow} from '@dcloudio/uni-app'
+	import {onShow, onLoad} from '@dcloudio/uni-app'
 	import { useCounterStore } from '@/store/counter';
 	import requestFast from '../../utils/requestFast';
 	import JqTopShowVue from '@/components/Jq-TopShow.vue';
+	import reServer from '../../utils/reServer';
 
 	const name = ref('admin')
 	const showDayMessage = ref(false)
@@ -98,14 +99,15 @@
 	const dataStoredetail = ref([])
 	const counter = useCounterStore()
 	const showTest = ref(null)
-	
+		
 	onShow (async () => {
 		if (counter.storageId === '' || counter.storageName === '') {
-			const res = await requestFast.get('/app/placepoint/getAllPlacepoint/v1')
+			const res = await requestFast.post('/public/store/view/getStoreInfo',{pid: 0})
 			//这里的索引21是可以后台传过来的数据，不作特别要求
-			counter.storageName = res.data.获取所有门店信息[21].storagename
-			counter.storageId = res.data.获取所有门店信息[21].storageid
-			counter.placepointid = res.data.获取所有门店信息[21].placepointid
+			counter.storageName = res.data[0].store
+			counter.storageId = res.data[0].sid
+			counter.placepointid = res.data[0].pid
+			console.log(res.data)
 		}
 	})
 	
@@ -123,16 +125,19 @@
 		showDrawer.value.close()
 	}
 	
-	const logout = () => {
+	const logout = async () => {
 		uni.showModal({
 			content:'是否退出?',
-			success: (res) => {
-				counter.isToken = false
+			success: async (res) => {
+				//按确认键
 				if (res.confirm) {
-					uni.redirectTo({
-						url:'/pages/login'
-					})
-					return;
+					var _res = await reServer.logout()
+					if (_res.code === 200) {
+						uni.removeStorageSync('token')
+						uni.redirectTo({
+							url:'/pages/login'
+						})
+					}
 				}
 			}
 		})

@@ -129,7 +129,6 @@
 		background-color: #2fb1fd;
 		height: 300rpx;
 		display: grid;
-		/* grid-template-rows: auto auto; */
 		place-items: center;
 	}
 	.body {

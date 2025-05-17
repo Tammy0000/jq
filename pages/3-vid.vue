@@ -57,8 +57,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-
+	import { ref } from 'vue';
+	import {onShow} from '@dcloudio/uni-app'
+	import reServer from '../utils/reServer';
+	
+	onShow(async () => {
+		console.log('rrrr')
+		const res = await reServer.getStockAmount(150925)
+		console.log(res.data)
+	})
+	
 	const changeTitleCss = ref('#eeeeee')
 </script>
 

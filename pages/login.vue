@@ -23,14 +23,25 @@
 
 <script setup>
 	import { ref } from 'vue';
-	import {onShow} from '@dcloudio/uni-app'
+	import {onShow, onLoad} from '@dcloudio/uni-app';
 	import { useCounterStore } from '../store/counter';
+	import reServer from '../utils/reServer';
+	
+	onLoad((opt) => {
+		console.log(opt.id)
+	})
 	
 	onShow(async () => {
-		if (counter.isToken) {
-			uni.switchTab({
-				url:'/pages/tabbar/index'
-			})
+		var  token = uni.getStorageSync('token');
+		if (token) {
+			console.log(token)
+			var res = await reServer.checkToken(token)
+			if (res.code === 200) {
+				uni.switchTab({
+					url:'/pages/tabbar/index'
+				})
+				return
+			}
 		}
 	})
 	
@@ -39,50 +50,30 @@
 	const password = ref('')
 	
 	
-	const login = () => {
-		if (user.value === '') {
-			showTop(-1, '请输入账号!')
-			return
-		}
-		if (password.value === '') {
-			showTop(-1, '请输入密码!')
-			return
-		}
-		if (user.value !== 'admin') {
-			showTop(-1, '账号错误!');
-			return;
-		}
-		if (password.value !== '888888') {
-			showTop(-1, '密码错误!');
-			return;
-		}
-		showTop(0, '登录成功!')
-		
-	}
-	
-	const showTop = (code, value) => {
-		if (code === -1) {
-			uni.showToast({
-				icon:'error',
-				title:value,
-				success: () => {
-					user.value = ''
-					password.value = ''
-				}
-			})
-			return;
-		}
-		uni.showToast({
-			icon:'success',
-			title:value,
-			success: () => {
-				counter.isToken = true
-				uni.switchTab({
-					url:'/pages/tabbar/index'
+	const login = async () => {
+		const res = await reServer.login(user.value, password.value);
+		if (res) {
+			if (res.code === 200) {
+				uni.setStorageSync('token', res.token)
+				uni.showToast({
+					icon:'success',
+					title:res.msg,
+					complete: () => {
+						uni.switchTab({
+							url:'/pages/tabbar/index',
+						})
+					}
 				})
 			}
-		})
+			if (res.code === 500) {
+				uni.showToast({
+					icon:'error',
+					title:res.msg
+				})
+			}
+		}
 	}
+	
 </script>
 
 <style>

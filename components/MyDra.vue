@@ -5,7 +5,7 @@
 				<view style="display: grid; grid-template-rows: auto;">
 					<view :class="key % 2 == 0 ? 'dataShow-s' : 'dataShow-m' " v-for="(value, key) in dataStoredetail" :key="key" @click="closeDra(key)">
 						<view style="width: 80%;">
-							<text style="font-size: 25rpx;">{{value.storagename}}</text>
+							<text style="font-size: 25rpx;">{{value.store}}</text>
 						</view>
 					</view>
 				</view>
@@ -20,9 +20,9 @@ import {onShow} from '@dcloudio/uni-app'
 import requestFast from '@/utils/requestFast.js'; 
 import { useCounterStore } from '@/store/counter';
 	onShow(async () => {
-		const res = await requestFast.get('/app/placepoint/getAllPlacepoint/v1')
+		const res = await requestFast.post('/public/store/view/getStoreInfo', {pid: 0})
 		dataStoredetail.value = []
-		dataStoredetail.value = res.data.获取所有门店信息
+		dataStoredetail.value = res.data
 	})
 	
 	const dataStoredetail = ref([])
@@ -30,9 +30,9 @@ import { useCounterStore } from '@/store/counter';
 	const counter = useCounterStore()
 	
 	const closeDra = (index) => {
-		counter.storageName = dataStoredetail.value[index].storagename
-		counter.storageId = dataStoredetail.value[index].storageid
-		counter.placepointid = dataStoredetail.value[index].placepointid
+		counter.storageName = dataStoredetail.value[index].store
+		counter.storageId = dataStoredetail.value[index].sid
+		counter.placepointid = dataStoredetail.value[index].pid
 		// console.log('storageid: ' + dataStoredetail.value[index].storageid)
 		// console.log('placepointid：' + dataStoredetail.value[index].placepointid)
 		showDrawer.value.close()

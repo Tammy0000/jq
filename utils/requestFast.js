@@ -5,6 +5,7 @@ const request = (url, method = 'GET', data = {}, header = {}, showLoading = true
   // 设置默认请求头
   const defaultHeader = {
     'Content-Type': 'application/json',
+	'Authorization': uni.getStorageSync('token'),
     ...header,
   };
 
@@ -31,7 +32,7 @@ const request = (url, method = 'GET', data = {}, header = {}, showLoading = true
         } else {
           reject(res);
           uni.showToast({
-            title: res.data.message || '请求失败',
+            title: res.data.message || '服务器开小差了，稍后再试!',
             icon: 'none',
           });
         }

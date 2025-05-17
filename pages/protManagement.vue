@@ -57,7 +57,7 @@
 				<view class="stock-context-series" @click="cli_osm">
 					<view>
 						<view>
-							<text style="color: red;">{{goodscount}}</text>
+							<text style="color: red;">{{outcount}}</text>
 						</view>
 						<view class="stock-context-show">
 							<text>当前断货品规 </text>
@@ -68,7 +68,7 @@
 				<view class="stock-context-series" @click="cli_stockInfo">
 					<view>
 						<view>
-							<text style="color: red;">{{imp_outrate}} % </text>
+							<text style="color: red;">{{topOutRate}} % </text>
 						</view>
 						<view class="stock-context-show">
 							<text>畅销品种断货率 </text>
@@ -79,7 +79,7 @@
 				<view class="stock-context-series" @click="cli_osm">
 					<view>
 						<view>
-							<text style="color: red;">{{imp_goodscount}}</text>
+							<text style="color: red;">{{topOutCount}}</text>
 						</view>
 						<view class="stock-context-show">
 							<text>畅销品种断货品规</text>
@@ -90,8 +90,7 @@
 				<view class="stock-context-series" @click="cli_stockInfo">
 					<view>
 						<view>
-							<text v-if="!loadData_mle" >加载中...</text>
-							<text v-if="loadData_mle" style="color: green;">{{core_outrate}} % </text>
+							<text style="color: green;">{{codeOutRate}} % </text>
 							<!-- 此处注释留下次使用 -->
 							<!-- <text style="color: green; font-size: 5rpx;">环比</text>
 							<text style="color: green; font-size: 5rpx;"> -1.8%</text> -->
@@ -105,8 +104,7 @@
 				<view class="stock-context-series">
 					<view>
 						<view>
-							<text v-if="!loadData_mle" >加载中...</text>
-							<text v-if="loadData_mle" >{{core_goodscount}}</text>
+							<text >{{codeOutCount}}</text>
 						</view>
 						<view class="stock-context-show">
 							<text>核心品种断货品规 </text>
@@ -142,7 +140,7 @@
 						<text>总品规数</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx;">
-						<text style="color: green;">{{sum_goodscount}}个</text>
+						<text style="color: green;">{{goodscount}}个</text>
 					</view>
 				</view>
 				<view class="actveSales-title">
@@ -150,7 +148,7 @@
 						<text>30天动销率</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx; align-items: center;">
-						<text style="color: green;">31.5%</text>
+						<text style="color: green;">{{saleRate_30}}</text>
 					</view>
 				</view>
 				<view class="actveSales-title">
@@ -158,7 +156,7 @@
 						<text>90天动销率</text>
 					</view>
 					<view style="display: grid; justify-items: end; margin-right: 50rpx; align-items: center;">
-						<text style="color: green;">55%</text>
+						<text style="color: green;">{{saleRate_90}}</text>
 					</view>
 				</view>
 				<view class="actveSales-title">
@@ -197,11 +195,11 @@
 			</view>
 			<view class="newPro" @click="cli_newTop">
 				<view style="border-right: 1rpx solid #a2a2a2;">
-					<text style="color: green;">218</text>
+					<text style="color: green;">{{newSku}}</text>
 					<text style="color: #a2a2a2;">新品品规 (个)</text>
 				</view>
 				<view>
-					<text style="color: #e4513f;">121</text>
+					<text style="color: #e4513f;">{{noSalesNewSku}}</text>
 					<text style="color: #a2a2a2;">不动销新品 (个)</text>
 				</view>
 			</view>
@@ -218,15 +216,15 @@
 				</view>
 				<view class="vid-bottom">
 					<view>
-						<text>42</text>
+						<text>{{invaBatch_0}}</text>
 						<text>近有效期批次</text>
 					</view>
 					<view>
-						<text style="color: red;">1230</text>
+						<text style="color: red;">{{invaMoney_0}}</text>
 						<text>库存成本金额</text>
 					</view>
 					<view>
-						<text>1.1%</text>
+						<text>{{invaRate_0}}%</text>
 						<text>库存占比</text>
 					</view>
 				</view>
@@ -238,15 +236,15 @@
 				</view>
 				<view class="vid-bottom">
 					<view>
-						<text>113</text>
+						<text>{{invaBatch_3}}</text>
 						<text>近有效期批次</text>
 					</view>
 					<view>
-						<text style="color: red;">3467</text>
+						<text style="color: red;">{{invaMoney_3}}</text>
 						<text>库存成本金额</text>
 					</view>
 					<view>
-						<text>3%</text>
+						<text>{{invaRate_3}}%</text>
 						<text>库存占比</text>
 					</view>
 				</view>
@@ -258,15 +256,15 @@
 				</view>
 				<view class="vid-bottom">
 					<view>
-						<text>347</text>
+						<text>{{invaBatch_6}}</text>
 						<text>近有效期批次</text>
 					</view>
 					<view>
-						<text style="color: red;">13357</text>
+						<text style="color: red;">{{invaMoney_6}}</text>
 						<text>库存成本金额</text>
 					</view>
 					<view>
-						<text>11.7%</text>
+						<text>{{invaRate_6}}%</text>
 						<text>库存占比</text>
 					</view>
 				</view>
@@ -306,20 +304,16 @@
 	import { useCounterStore } from '../store/counter'
 	import { getCurrentDate } from '../utils/dateUtils'
 	import JqTopShowVue from '../components/Jq-TopShow.vue'
+	import reServer from '../utils/reServer'
 	
 	onShow( async () => {
 		selectDate.value = getCurrentDate()
+				
 		//避免出现空加载页面去请求后台数据
 		if (counter.storageName === '请选择查询门店') {
 			return;
 		}
-		
-		changeData_goods(counter.placepointid)
-		changeData_goodsLKS(counter.placepointid)
-		changeData_SumGoodscount(counter.placepointid)
-		changeData_goodsMLE(counter.placepointid)
-		changeData(counter.placepointid)
-		changeData_BDxGoodsCount(counter.placepointid)
+		Getdata(counter.placepointid)
 	})
 	
 	const counter = useCounterStore()
@@ -331,141 +325,196 @@
 	const turnoverdays = ref(0)
 	//断货率
 	const outrate = ref(0)
+	//断货品规
+	const outcount = ref(0)
+	
 	//品规数
 	const goodscount = ref(0)
 	//最近30天日均销售成本额
 	const avg30money = ref(0)
 	const loadData = ref(false)
-	//畅销品种品规以及断货率
-	const imp_outrate = ref(0)
-	const imp_goodscount = ref(0)
+	//畅销品断货率
+	const topOutRate = ref(0)
+	const topOutCount = ref(0)
+	//畅销品断货率
+	const codeOutRate= ref(0)
 	//核心品种品规以及断货率
-	const core_outrate = ref(0)
+	const codeOutCount = ref(0)
 	//总品规数
 	const sum_goodscount = ref(0)
 	//30天动销品规数
-	const dxgoodscount_per_30 = ref(0)
+	const saleRate_30 = ref(null)
 	//90天动销品规数
-	const dxgoodscount_per_90 = ref(0)
+	const saleRate_90 = ref(null)
 	//30-90天不动销率
 	const Bdxgoodscount_30_90 = ref(0)
 	//90-180天不动销率
 	const Bdxgoodscount_90_180 = ref(0)
 	//180天不动销率
 	const Bdxgoodscount_180 = ref(0)
+	//新品品规数
+	const newSku = ref(0)
+	//不动销新品数
+	const noSalesNewSku = ref(0)
+	//  有效期批次命名
+	const invaBatch_0 = ref(0)
+	const invaBatch_3 = ref(0)
+	const invaBatch_6 = ref(0)
+	// 有效期库存成本
+	const invaMoney_0 = ref(0)
+	const invaMoney_3 = ref(0)
+	const invaMoney_6 = ref(0)
+	// 有效期占比
+	const invaRate_0 = ref(0)
+	const invaRate_3 = ref(0)
+	const invaRate_6 = ref(0)
 	
 	const core_goodscount = ref(0)
 	const loadData_mle = ref(false)
 	
-
     //监听状态管理的ID是否发生变化
 	watch(() => counter.storageId, (newValue, oldValue) => {
 		changeData(newValue)
 	})
 	
 	watch(() => counter.placepointid,  (newValue, oldValue) => {
-		changeData_goods(newValue)
-		changeData_goodsLKS(newValue)
-		changeData_goodsMLE(newValue)
-		changeData_SumGoodscount(newValue)
-		changeData_DxGoodsCount(newValue)
-		changeData_BDxGoodsCount(newValue)
+		// changeData_goods(newValue)
+		// changeData_goodsLKS(newValue)
+		// changeData_goodsMLE(newValue)
+		// changeData_SumGoodscount(newValue)
+		// changeData_DxGoodsCount(newValue)
+		// changeData_BDxGoodsCount(newValue)
+		Getdata(newValue)
 	})
 	
 	const getDate = (date) => {
 		console.log(date)
 	}
 	
-	const changeData_BDxGoodsCount = async (Id) => {
-		Bdxgoodscount_30_90.value = await BDxGoodsCount(30, 90, Id)
-		Bdxgoodscount_90_180.value = await BDxGoodsCount(90, 180, Id)
-		Bdxgoodscount_180.value = await BDxGoodsCount(180, 0, Id)
+	const Getdata = async(pId) => {
+		// await getNewGoodsDataInfo(pId)
+		getStockAmount(pId)
+		getTurnoverDays(pId)
+		getOutOfStockDays(pId)
+		getOutOfStockRate(pId)
+		getTopGoodsOutOfStock(pId)
+		getCodeGoodsOutOfStock(pId)
+		getStockCount(pId)
+		getStoreSalesRate(pId, 30)
+		getStoreSalesRate(pId, 90)
+		getNoSaleCountBySku(pId, 30, 90)
+		getNoSaleCountBySku(pId, 0, 180)
+		getNoSaleCountBySku(pId, 90, 180)
+		getSumInvaGoodsidInfo(pId, 0, 3)
+		getSumInvaGoodsidInfo(pId, 3, 6)
+		getSumInvaGoodsidInfo(pId, 6, 12)
 	}
 	
-	const BDxGoodsCount = async (start, end, Id) => {
-		var res = await requestFast.post('/app/goods/getBDXGoodscountByPlacepointid/v1', {
-			placepointid: Id,
-			storageid: counter.storageId,
-			startdays: start,
-			enddays: end
-		})
-		return res.data.根据门店ID和保管账ID和天数获取对应门店不动销品规数.goodscount
-	}
-	
-	const changeData_DxGoodsCount = async (Id) => {
-		var day30 = await DxGoodsCount(30, Id)
-		var day90 = await DxGoodsCount(90, Id)
-	}
-	
-	const DxGoodsCount = async (days, Id) => {
-		var res = await requestFast.post('/app/goods/getDXGoodscountByPlacepointid/v1', {
-			days: days,
-			placepointid: Id,
-			storageid: counter.storageId
-		})
-		return res.data.根据门店ID和保管账ID和天数获取对应门店动销品规数.goodscount
-	}
-	
-	const changeData = async (Id) => {
-		stockmoney.value = 0
-		turnoverdays.value = 0
+	const getStockAmount = async (pid) => {
 		loadData.value = false
-		const res_turnoverdays = await requestFast.post('/app/goods/getMoneyAndTurnoverdays/v1', {
-			placepointid: Id,
-			storageid: counter.storageId
-		})
-		var _res = res_turnoverdays.data.根据门店ID和保管账ID获取库存金额跟当前周转天数
-		stockmoney.value = _res.stockmoney
-		turnoverdays.value = _res.turnoverdays
-		loadData.value = true
+		var res = await reServer.getStockAmount(pid)
+		if (res.code === 200) {
+			loadData.value = true
+			stockmoney.value = res.data
+		}
 	}
 	
-	const changeData_SumGoodscount = async(pid) => {
-		sum_goodscount.value = 0
-		const res = await requestFast.post('/app/goods/getGoodscountByStorageid/v1', {
-			placepointid: pid,
-			storageid: counter.storageId
-		})
-		var _res = res.data.根据门店ID和保管账ID获取门店品规数
-		sum_goodscount.value = _res.goodscount
+	const getTurnoverDays = async(pid) => {
+		const res = await reServer.getTurnoverDays(pid)
+		if (res.code === 200) {
+			turnoverdays.value = res.data
+		}
 	}
 	
-	const changeData_goods = async (pid) => {
-		goodscount.value = 0
-		outrate.value = 0
-		const res = await requestFast.post('/app/goods/getOutGoodscountByPlacepointidAndStorageid/v1', {
-			placepointid: pid,
-			storageid: counter.storageId
-		})
-		var _res = res.data.根据门店ID和保管账ID获取当前断货情况
-		goodscount.value = _res.goodscount
-		outrate.value = _res.outrate
+	const  getOutOfStockDays = async (pid) => {
+		const res = await reServer.getOutOfStockDays(pid, 30)
+		outcount.value = res.code === 200 ? res.data : 0
 	}
 	
-	const changeData_goodsLKS = async (pid) => {
-		const res = await requestFast.post('/app/goods/getLKSGoodsByPlacepointid/v1', {
-			placepointid: pid,
-			storageid: counter.storageId
-		})
-		var _res = res.data.根据门店ID和保管账ID获取畅销品断货情况
-		imp_goodscount.value = _res.goodscount
-		imp_outrate.value = _res.outrate
+	const getTopGoodsOutOfStock = async (pid) => {
+		const res = await reServer.getTopGoodsOutOfStockRate(pid, 30)
+		if (res.code === 200) {
+			topOutRate.value = res.topOutOfStockRate
+			topOutCount.value = res.topOutOfStock
+		}
 	}
 	
-	const changeData_goodsMLE = async (pid) => {
-		core_outrate.value = 0
-		core_goodscount.value = 0
-		loadData_mle.value = false
-		const res = await requestFast.post('/app/goods/getMLEGoodsByStorageid/v1', {
-			placepointid: pid,
-			storageid: counter.storageId
-		})
-		var _res = res.data.根据门店ID和保管账ID获取核心品断货情况
-		core_goodscount.value = _res.goodscount
-		core_outrate.value = _res.outrate
-		loadData_mle.value = true
+	const getCodeGoodsOutOfStock = async(pid) => {
+		const res = await reServer.getCodeGoodsOutOfStockRate(pid, 30)
+		if (res.code === 200) {
+			codeOutRate.value = res.codeOutOfStockRate
+			codeOutCount.value = res.codeOutOfStock
+		}
+	} 
+	
+	const getOutOfStockRate = async(pid) => {
+		const res = await reServer.getOutOfStockRate(pid, 30)
+		outrate.value = res.code === 200 ? res.data : 0
 	}
 	
+	const getStockCount = async(pid) => {
+		const res = await reServer.getStockCount(pid)
+		if (res.code === 200) {
+			goodscount.value = res.data
+		}
+	}
+	
+	const getStoreSalesRate = async(pid, days) => {
+		const res = await reServer.getinStoreSalesRate(pid, days)
+		if (res.code === 200) {
+			if (days === 30) {
+				saleRate_30.value = res.data
+			}
+			if (days === 90) {
+				saleRate_90.value = res.data
+			}
+		}
+	}
+	
+	const getNoSaleCountBySku = async(pid, days1, days2) => {
+		const res = await reServer.getNoSaleCountBySku(pid, days1, days2)
+		if (res.code === 200) {
+			if (days1 === 30) {
+				Bdxgoodscount_30_90.value = res.data
+			}
+			if (days1 === 90) {
+				Bdxgoodscount_90_180.value = res.data
+			}
+			if (days1 === 0) {
+				Bdxgoodscount_180.value = res.data
+			}
+		}
+	}
+	
+	const getNewGoodsDataInfo = async (pid) => {
+		const res = await reServer.getNewGoodsDataInfo(pid)
+		if (res.code === 200) {
+			newSku.value = res.goodsCount
+			noSalesNewSku.value = res.noDyNewGoodsCount
+		}
+	}
+	
+	const getSumInvaGoodsidInfo = async (pid, start, end) => {
+		const res = await reServer.getSumInvaGoodsidInfo(pid, start * 30, end * 30)
+		if (res) {
+			if (start === 0) {
+				invaBatch_0.value = res.sumInvaGoodsidCount
+				invaMoney_0.value = res.sumInvaBatchmoney
+				invaRate_0.value = res.sumInvaBatchmoneyRate
+			}
+			if (start === 3) {
+				invaBatch_3.value = res.sumInvaGoodsidCount
+				invaMoney_3.value = res.sumInvaBatchmoney
+				invaRate_3.value = res.sumInvaBatchmoneyRate
+			}
+			if (start === 6) {
+				invaBatch_6.value = res.sumInvaGoodsidCount
+				invaMoney_6.value = res.sumInvaBatchmoney
+				invaRate_6.value = res.sumInvaBatchmoneyRate
+			}
+		}
+	}
+			
 	const showDataDra = () => {
 		showDra.value.openDra()
 	}

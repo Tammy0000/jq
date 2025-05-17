@@ -252,6 +252,13 @@
 			{
 				"navigationBarTitleText" : "分类选择"
 			}
+		},
+		{
+			"path" : "pages/institutionChoice/institutionChoice",
+			"style" : 
+			{
+				"navigationBarTitleText" : "机构选择"
+			}
 		}
 		
 	],

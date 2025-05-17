@@ -22,9 +22,9 @@
 										本期日期
 									</text>
 									<view>
-										<text class="drawer-font">2025-02-15</text>
+										<text class="drawer-font">{{today}}</text>
 										<text class="drawer-font"> 至 </text>
-										<text class="drawer-font">2025-02-15</text>
+										<text class="drawer-font">{{today}}</text>
 									</view>
 								</view>
 								<view>
@@ -44,10 +44,10 @@
 								<text>日</text>
 							</view>
 							<view @click="selectDate_ref(2)" :class="selecrIndex === 2 ? 'selectColor-Active' : 'selectColor'">
-								<text>月</text>
+								<text>周</text>
 							</view>
 							<view @click="selectDate_ref(3)" :class="selecrIndex === 3 ? 'selectColor-Active' : 'selectColor'">
-								<text>年</text>
+								<text>月</text>
 							</view>
 						</view>
 					</view>
@@ -56,7 +56,7 @@
 			<view class="top-message">
 				<view>
 					<view>
-						<text style="color: #f4553d; font-size: 70rpx;">273</text>
+						<text style="color: #f4553d; font-size: 70rpx;">{{amount}}</text>
 						<text>元</text>
 					</view>
 					<view>
@@ -68,14 +68,14 @@
 						</text>
 					</view>
 					<view>
-						<text style="color: green;">1200 </text>
+						<text style="color: green;">{{target}} </text>
 						<text>元</text>
 					</view>
 				</view>
 				<view>
 					<view>
 						<text>日累计完成率</text>
-						<text style="color: green;"> 23 %</text>
+						<text style="color: green;">{{targetRate}} %</text>
 					</view>
 					<view>
 						<text>片区排名第</text>
@@ -143,23 +143,71 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
+	import { ref, watch } from 'vue';
 	import { useCounterStore } from '../store/counter';
 	import JqTopShowVue from '../components/Jq-TopShow.vue';
+	import reServer from '../utils/reServer';
+	import { getCurrentDate, getDateBefore } from '../utils/dateUtils';
+	import {onShow} from '@dcloudio/uni-app'
 	
 	const showRight = ref(null)
 	const counter = useCounterStore()
 	const showMyDra = ref(null)
 	const selectDate = ref('')
 	const selecrIndex = ref(1)
+	const today = getCurrentDate()
+	const amount = ref(0)
+	const targetRate = ref(0)
+	const target = ref(0)
+	
+	onShow(async () => {
+		getData(counter.placepointid)
+	})
+	
+	watch(() => counter.placepointid, (newValue, oldValue) => {
+		getData(newValue)
+	})
+	
+	const getData = (pid) => {
+		getAmount(pid, today, today)
+		getSalesTarget(pid)
+	}
+	
+	const getAmount = async (pid, startStr, endStr) => {
+		const res = await reServer.getReceivableAmount(pid, startStr, endStr)
+		if (res) {
+			if (res.code === 200) {
+				amount.value = res.data
+			}
+		}
+	}
 	
 	const showMyDraRef = () => {
 		showMyDra.value.openDra()
 	}
 	
-	const selectDate_ref = (index) => {
+	const selectDate_ref = async (index) => {
 		if (selecrIndex.value === index) return
 		selecrIndex.value = index
+		if (index === 1) {
+			await getAmount(counter.placepointid, today, today)
+		}
+		if (index === 2) {
+			await getAmount(counter.placepointid, getDateBefore(today, 7), today)
+		}
+		if (index === 3) {
+			await getAmount(counter.placepointid, getDateBefore(today, 30), today)
+		}
+	}
+	
+	const getSalesTarget = async (pid) => {
+		const res = await reServer.getSalesTarget(pid, today)
+		if (res) {
+			if (res.code === 200) {
+				target.value = res.daysDivide
+				targetRate.value = res.percent
+			}
+		}
 	}
 	
 	const showDrawer = () => {
