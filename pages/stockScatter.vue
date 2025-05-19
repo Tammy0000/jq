@@ -1,8 +1,19 @@
 <template>
 	<view class="body">
 		<view class="topTitle">
-			<view>
-				<text style="color: #fff;">{{storgeName}}</text>
+			<view style="margin-left: 30rpx;">
+				<view>
+					<text style="color: #fff;">商品名：{{goodsname}}</text>
+				</view>
+				<view>
+					<text style="color: #fff;">商品编号：{{goodsid}}</text>
+				</view>
+				<view>
+					<text style="color: #fff;">规格：{{goodstype}}</text>
+				</view>
+				<view>
+					<text style="color: #fff;">厂家：{{factoryname}}</text>
+				</view>
 			</view>
 			<view>
 				<button @click="cli_prod" size="mini" style="background-color: #fff; color: #30a3fe; border-radius: 25rpx;">商品销售</button>
@@ -15,18 +26,18 @@
 			<view style="background-color: #e5f1ff;">
 				<text>机构</text>
 				<text>数量</text>
+				<text>库存成本</text>
 			</view>
-			<view style="background-color: #fff; font-size: 20rpx;">
-				<text>广东健寿堂长岐二分店保管账</text>
-				<text>7</text>
-			</view>
-			<view style="background-color: #f8f8fa; font-size: 20rpx;">
-				<text>广东健寿堂长岐分店保管账</text>
-				<text>2</text>
-			</view>
-			<view style="background-color: #fff; font-size: 20rpx;">
-				<text>广东健寿堂方兴分店保管账</text>
-				<text>5</text>
+			<view
+			  v-for="(value, key, index) in dataList" :key="key"
+			  :style="{
+			    backgroundColor: index % 2 === 0 ? '#fff' : '#f8f8fa',
+			    fontSize: '20rpx'
+			  }"
+			>
+			  <text>{{value.storername}}</text>
+			  <text>{{value.goodsqty}}</text>
+			  <text>{{NumberUtils.toFixedNumber(value.notaxmoney, 2)}}</text>
 			</view>
 		</view>
 	</view>
@@ -34,16 +45,28 @@
 
 <script setup>
 	import {onLoad} from '@dcloudio/uni-app'
-	import requestFast from '../utils/requestFast'
+	import reServer from '../utils/reServer'
 	import { ref } from 'vue'
+	import NumberUtils from '../utils/NumberUtils'
 	
-	const storgeName = ref('')
+	const goodsname = ref('')
+	const goodsid = ref('')
+	const goodstype = ref('')
+	const factoryname = ref('')
+	const dataList = ref([])
 	
 	onLoad(async (opt) => {
-		const res = await requestFast.get(`/app/goods/getGoodsByGoodsid/v1/${opt.goodsid}`)
-		var _res = res.data.根据商品ID获取商品信息
-		storgeName.value = _res.currencyname
+		goodsname.value = opt.goodsname
+		goodsid.value = opt.goodsid
+		goodstype.value = opt.goodstype
+		factoryname.value = opt.factoryname
+		await getProductStoreStockList(goodsid.value)
 	})
+	
+	const getProductStoreStockList = async(goodsid) => {
+		const res = await reServer.getProductStoreStockList(goodsid)
+		dataList.value = res.data
+	}
 	
 	const list = [{text: '显示批次', value: 0}, {text: '显示门店', value: 1}, {text: '不按区域汇总', value: 2}]
 	const cli_prod = () => {
@@ -56,7 +79,7 @@
 <style scoped>
 	.scatterData > view {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr;
 		place-items: center;
 		height: 100rpx;
 	}

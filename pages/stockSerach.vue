@@ -24,9 +24,9 @@
 				<scroll-view scroll-y="true" style="height: 75vh; width: 100%;">
 					<view :class="key % 2 === 0 ? 'dataShow-s' : 'dataShow-m' " @click="cli_scatter(value)" v-for="(value, key) in dataList" :key="key">
 						<text>{{key + 1}}</text>
-						<text style="color: #4c91ed; " @click="showInfo(value)">{{value.currencyname}}</text>
+						<text style="color: #4c91ed; " @click="showInfo(value)">{{value.goodsname}}</text>
 						<text>{{value.goodstype}}</text>
-						<text>{{value.maxlsj}}</text>
+						<text>{{value.price}}</text>
 						<text>{{value.factoryname}}</text>
 					</view>
 				</scroll-view>
@@ -38,9 +38,12 @@
 <script setup>
 	import { ref } from 'vue';
 	import requestFast from '../utils/requestFast';
+	import reServer from '../utils/reServer';
+	import { useCounterStore } from '../store/counter';
 	
 	const dataList = ref([])
 	const serachName = ref('')
+	const counter = useCounterStore()
 	
 	const clearData = () => {
 		dataList.value = []
@@ -50,14 +53,14 @@
 		//阻止触发上层事件
 		event.stopPropagation();
 		uni.showModal({
-			content:`商品名: ${value.currencyname}\n 生产厂商: ${value.factoryname}\n 规格: ${value.goodstype}\n 最高会员价: ${value.maxhyj}\n 最低会员价: ${value.minhyj}\n 最高零售价: ${value.maxlsj}\n 最低零售价: ${value.minlsj}`,
+			content:`商品名: ${value.goodsname}\n 生产厂商: ${value.factoryname}\n 规格: ${value.goodstype}\n 会员价: ${value.vipPrice}\n 零售价: ${value.price}\n 成本价: ${value.cbj}\n 新毛利分类: ${value.xmlv}`,
 			showCancel:false,
 		})
 	}
 	
 	const cli_scatter = (value) => {
 		uni.navigateTo({
-			url:"/pages/stockScatter?goodsid=" + value.goodsid
+			url:"/pages/stockScatter?goodsid=" + value.goodsid + "&goodsname=" + value.goodsname + "&goodstype=" + value.goodstype + "&factoryname=" + value.factoryname
 		})
 	}
 	
@@ -71,10 +74,12 @@
 			return
 		}
 		dataList.value = []
-		const res = await requestFast.post('/app/goods/getGoodsByCurrencycame/v1', {
-			currencyname: serachName.value
-		})
-		dataList.value = res.data.根据商品名称获取商品信息
+		const res = await reServer.getProductQuerySummary(counter.placepointid, serachName.value)
+		if (res) {
+			if (res.code === 200) {
+				dataList.value = res.data
+			}
+		}
 	} 
 	
 </script>

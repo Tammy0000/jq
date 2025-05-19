@@ -2,8 +2,7 @@
 	<view class="body">
 		<view class="container">
 			<view>
-				<image src="../static/img/public/门店.svg" style="width: 50rpx; height: 50rpx;"></image>
-				<text style="color: #666666;">健寿堂直营店</text>
+				<JqTopShowVue :showRight="true" @handle_Date="getDate"></JqTopShowVue>
 			</view>
 			<view class="vid">
 				<view>
@@ -60,6 +59,7 @@
 	import { ref } from 'vue';
 	import {onShow} from '@dcloudio/uni-app'
 	import reServer from '../utils/reServer';
+	import JqTopShowVue from '../components/Jq-TopShow.vue'
 	
 	onShow(async () => {
 		console.log('rrrr')

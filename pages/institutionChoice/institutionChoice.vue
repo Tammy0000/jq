@@ -54,7 +54,9 @@
 						<view class="store-data">
 							<text style="font-size: 15rpx;">{{value.store}}</text>
 						</view>
-						<view></view>
+						<view class="store-data">
+							<text style="font-size: 15rpx;" v-if="switchNum === 2">{{value.num}}</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -89,6 +91,9 @@
 		storeInfoList.value = []
 		if (index === 1) {
 			await getStoreInfo()
+		}
+		if (index === 2) {
+			storeInfoList.value = [{store: 'A区', num: 20, pid: -1, sid: -10}, {store: 'B区', num: 7, pid: -2, sid: 20}]
 		}
 	}
 	

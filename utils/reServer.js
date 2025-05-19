@@ -48,5 +48,9 @@ export default {
 	//获取门店时间内的有限期相关信息
 	getSumInvaGoodsidInfo: async (pid, startdays, enddays) => await requestFast.post('/public/store/view/getSumInvaGoodsidInfo', {pid: pid, startdays: startdays, enddays: enddays}),
 	//获取门店指定时间的目标情况
-	getSalesTarget: async (pid, today) => await requestFast.post('/public/store/view/getSalesTarget', {pid: pid, today: today})
+	getSalesTarget: async (pid, today) => await requestFast.post('/public/store/view/getSalesTarget', {pid: pid, today: today}),
+	//根据商品名称模糊查询或者根据商品ID查询
+	getProductQuerySummary: async(pid, keyword) => await requestFast.post('/public/store/view/getProductQuerySummary', {pid: pid, keyword: keyword}),
+	//根据商品id查询所有门店库存情况
+	getProductStoreStockList: async(goodsid) => await  requestFast.post('/public/store/view/getProductStoreStockList', {goodsid: goodsid})
 }
