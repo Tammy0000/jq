@@ -1,82 +1,163 @@
 <template>
-  <view class="charts-box">
-    <qiun-data-charts 
-      type="line"
-      :opts="opts"
-      :chartData="chartData"
-    />
-  </view>
+	<view class="body">
+		<view class="container">
+			<view>
+				<JqTopShowVue :showRight="true"></JqTopShowVue>
+			</view>
+			<view class="vid">
+				<view>
+					<text style="color: #b3b3b3;">有效期</text>
+				</view>
+				<view style="justify-self: end;">
+					<text style="color: #b3b3b3;"> - </text>
+					<text>至</text>
+					<text style="color: #b3b3b3;"> 2025-05-27</text>
+				</view>
+			</view>
+			<view class="dataShow">
+				<view>
+					<view style="width: 100%; height: 100%; display: grid; place-items: center; background-color: transparent;">
+						<text>明细汇总</text>
+					</view>
+					<view style="width: 100%; height: 100%; display: grid; place-items: center; background-color: #eeeeee;">
+						<text>门店汇总</text>
+					</view>
+				</view>
+				<view>
+					<view style="margin-left: 20rpx;">
+						<text>分类筛选: </text>
+						<text style="color: #2f9ffe;">全部</text>
+					</view>
+					<view style="display: grid; width: 90%; justify-items: end; margin-right: 20rpx;">
+						<text>
+							>
+						</text>
+					</view>
+				</view>
+				<view class="dataShow-title" style="background-color: #e2eefd;">
+					<text>商品名称</text>
+					<text>零售价</text>
+					<text>有效期至</text>
+					<text>库存数量</text>
+					<text>库存金额</text>
+					<text>月销量</text>
+				</view>
+				<view class="dataShow-title" style="background-color: #f8f8fa;" v-for="(value, key) in dataList" :key="key">
+					<text style="color: #2f9ffe; padding-left: 15rpx;" @click="GoodsInfo(value.goodsid)">{{value.goodsname}}</text>
+					<text>{{value.price}}</text>
+					<text>{{value.invaliddate}}</text>
+					<text>{{value.goodsqty}}</text>
+					<text>{{NumberUtils.toFixedNumber(value.notaxmoney, 2)}}</text>
+					<text>{{value.saleQty}}</text>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      chartData: {},
-      //您可以通过修改 config-ucharts.js 文件中下标为 ['line'] 的节点来配置全局默认参数，如都是默认参数，此处可以不传 opts 。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
-      opts: {
-        color: ["#1890FF","#91CB74","#FAC858","#EE6666","#73C0DE","#3CA272","#FC8452","#9A60B4","#ea7ccc"],
-        padding: [15,10,0,15],
-        enableScroll: false,
-        legend: {},
-        xAxis: {
-          disableGrid: true
-        },
-        yAxis: {
-          gridType: "dash",
-          dashLength: 2
-        },
-        extra: {
-          line: {
-            type: "curve",
-            width: 2,
-            activeType: "hollow"
-          }
-        }
-      }
-    };
-  },
-  onReady() {
-    this.getServerData();
-  },
-  methods: {
-    getServerData() {
-      //模拟从服务器获取数据时的延时
-      setTimeout(() => {
-        //模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
-        let res = {
-            categories: ["2018","2019","2020","2021","2022","2023"],
-            series: [
-              {
-                name: "成交量A",
-                lineType: "dash",
-                data: [35,8,25,37,4,20]
-              },
-              {
-                name: "成交量B",
-                data: [70,40,65,100,44,68]
-              },
-              {
-                name: "成交量C",
-                data: [100,80,95,350,112,132]
-              },
-			  {
-			    name: "成交量D",
-			    data: [50,35,20,52,32,36]
-			  }
-            ]
-          };
-        this.chartData = JSON.parse(JSON.stringify(res));
-      }, 500);
-    },
-  }
-};
+<script setup>
+	import { ref, watch } from 'vue';
+	import {onShow, onLoad} from '@dcloudio/uni-app'
+	import reServer from '../utils/reServer';
+	import JqTopShowVue from '../components/Jq-TopShow.vue'
+	import { useCounterStore } from '../store/counter';
+	import NumberUtils from '../utils/NumberUtils';
+	
+	const counter = useCounterStore()
+	const dataList = ref([])
+	
+	onShow (() => {
+		if (dataList.value.length === 0) {
+			getSumInvaGoodIdInfoList()
+		}
+	})
+	
+	watch(() => counter.placepointid, (newValue, oldValue) => {
+		if (counter.placepointid === newValue) return
+		getSumInvaGoodIdInfoList()
+	})
+	
+	const getSumInvaGoodIdInfoList = async () => {
+		const res = await reServer.getSumInvaGoodIdInfoList(counter.placepointid, 90, 180)
+		if (res) {
+			if (res.code === 200) {
+				dataList.value = []
+				dataList.value = res.data
+			}
+		}
+	}
+	
+	const GoodsInfo = async(goodsid) => {
+		const res = await reServer.getGoodsInfoByPidAndGoodsId(counter.placepointid, goodsid)
+		if (res) {
+			if (res.code === 200) {
+				//阻止触发上层事件
+				event.stopPropagation();
+				uni.showModal({
+					content:`商品名: ${res.data.goodsname}\n 生产厂商: ${res.data.factoryname}\n 规格: ${res.data.goodstype}\n 会员价: 0\n 零售价: ${res.data.price}\n 成本价: ${res.data.cbj}\n 新毛利分类: ${res.data.xmlv}`,
+					showCancel:false,
+				})
+			}
+		}
+	}
+	
+	const changeTitleCss = ref('#eeeeee')
 </script>
 
 <style scoped>
-  /* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
-  .charts-box {
-    width: 100%;
-    height: 200px;
-  }
+	.dataShow-title > text {
+		font-size: 20rpx;
+	}
+	.dataShow-title {
+		height: 100rpx;
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		place-items: center;
+	}
+	.dataShow > view:nth-child(2) {
+		display: grid;
+		width: 100%;
+		height: 100rpx;
+		grid-template-columns: 2fr 1fr;
+		align-items: center;
+	}
+	.dataShow > view:nth-child(1) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		place-items: center;
+		height: 100rpx;
+	}
+	.dataShow {
+		display: grid;
+		grid-template-rows: repeat(4, auto);
+		width: 100%;
+		background-color: white;
+		border-radius: 35rpx;
+		overflow: hidden;
+	}
+	.vid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+		height: 100rpx;
+	}
+	.container > view:first-child {
+		display: grid;
+		gap: 20rpx;
+		grid-template-columns: auto auto 1fr;
+		align-items: center;
+		margin: 35rpx 0;
+	}
+	.container {
+		width: 94%;
+	}
+	.body {
+		 width: 100vw;
+		 height: 100vh;
+		 display: flex;
+		 flex-direction: column;
+		 place-items: center;
+		 background-color: #f5f5f5;
+	 }       
 </style>

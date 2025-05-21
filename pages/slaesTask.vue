@@ -10,6 +10,14 @@
 						<text style="text-decoration: underline; font-size: 30rpx; color: #1d8fff;" @click="showDrawer">数据条件</text>
 					</view>
 				</view>
+				<view style="margin: 20rpx 0;display: grid; grid-template-columns: auto 1fr;">
+					<view>
+						<image src="/static/img/public/金钱类型.svg" style="height: 50rpx; width: 50rpx; margin-left: 20rpx;"></image>
+					</view>
+					<view style="padding-left: 30rpx;">
+						<uni-data-checkbox :localdata="saleTargetList" v-model="radio" @change="Series"></uni-data-checkbox>
+					</view>
+				</view>
 				<view>
 					<MyDraVue ref="showMyDra"></MyDraVue>
 					<uni-drawer ref="showRight" mode="right" :mask-click="false">
@@ -64,7 +72,7 @@
 					</view>
 					<view>
 						<text>
-							日目标
+							{{timeTarget}}目标
 						</text>
 					</view>
 					<view>
@@ -74,7 +82,7 @@
 				</view>
 				<view>
 					<view>
-						<text>日累计完成率</text>
+						<text>{{timeTarget}}累计完成率</text>
 						<text style="color: green;">{{targetRate}} %</text>
 					</view>
 					<view>
@@ -113,7 +121,6 @@
 					</view>
 				</view>
 				<view style="border: 1rpx solid #5da4e3; height: 250rpx;">
-					此处展示的是曲线图
 				</view>
 			</view>
 			<view class="big-title">
@@ -149,6 +156,8 @@
 	import reServer from '../utils/reServer';
 	import { getCurrentDate, getDateBefore } from '../utils/dateUtils';
 	import {onShow} from '@dcloudio/uni-app'
+	import { getDaysSinceFirstOfMonth, getDaysSinceMonday } from '../utils/dateUtils';
+	import NumberUtils from '../utils/NumberUtils.js'
 	
 	const showRight = ref(null)
 	const counter = useCounterStore()
@@ -159,6 +168,11 @@
 	const amount = ref(0)
 	const targetRate = ref(0)
 	const target = ref(0)
+	const radio = ref(0)
+	const saleTargetList = [
+		{text: '销售', value: 0}, {text: '毛利', value: 1}
+	]
+	const timeTarget = ref('日')
 	
 	onShow(async () => {
 		getData(counter.placepointid)
@@ -182,6 +196,22 @@
 		}
 	}
 	
+	const getAmountProfit = async (pid, startStr, endStr) => {
+		const res = await reServer.getGrossProfitRate(pid, startStr, endStr)
+		if (res) {
+			if (res.code === 200) {
+				amount.value = res.data
+			}
+		}
+	}
+	
+	const Series = async() => {
+		await getSalesTarget(counter.placepointid)
+		const index = selecrIndex.value
+		await selectTime(index)
+		// await targetMu(index)
+	}
+	
 	const showMyDraRef = () => {
 		showMyDra.value.openDra()
 	}
@@ -189,19 +219,69 @@
 	const selectDate_ref = async (index) => {
 		if (selecrIndex.value === index) return
 		selecrIndex.value = index
+		await selectTime(index)
+		// await targetMu(index)
+	}
+	
+	const selectTime = async(index) => {
 		if (index === 1) {
-			await getAmount(counter.placepointid, today, today)
+			timeTarget.value = '日'
+			if (radio.value == 0) {
+				await getAmount(counter.placepointid, today, today)
+				return
+			}
+			await getAmountProfit(counter.placepointid, today, today)
+			return
 		}
 		if (index === 2) {
-			await getAmount(counter.placepointid, getDateBefore(today, 7), today)
+			timeTarget.value = '周'
+			if (radio.value === 0) {
+				await getAmount(counter.placepointid, getDateBefore(today, getDaysSinceMonday()), today)
+				return
+			}
+			await getAmountProfit(counter.placepointid, getDateBefore(today, getDaysSinceMonday()), today)
+			return
 		}
 		if (index === 3) {
-			await getAmount(counter.placepointid, getDateBefore(today, 30), today)
+			timeTarget.value = '月'
+			if (radio.value === 0) {
+				await getAmount(counter.placepointid, getDateBefore(today, getDaysSinceFirstOfMonth()), today)
+				return
+			}
+			await getAmountProfit(counter.placepointid, getDateBefore(today, getDaysSinceFirstOfMonth()), today)
+			return 
+		}
+	}
+	
+	const targetMu = async(index) => {
+		//此处只针对周目标和月目标进行一个数据计算 （目标和完成率）
+		//先获取月目标的销售或者毛利目标数值
+		const res = await reServer.getSalesTargetByPid(counter.placepointid, today)
+		//此处为周目标
+		if (index === 2 && res.code === 200) {
+			//周目标
+			const  Week = radio.value === 0 ? res.data.targetSales / 4 : res.data.targetProfit / 4
+			//周目标完成率
+			const rate = amount.value / NumberUtils(Week, 0)
+			target.value = NumberUtils(Week, 0)
+			targetRate.value = NumberUtils(rate, 0)
+			uni.showToast({
+				title:target.value
+			})
+			return
+		}
+		if (index === 3 && res.code === 200) {
+			//月目标
+			const  Mon = radio.value === 0 ? res.data.targetSales : res.data.targetProfit
+			//月目标完成率
+			const rate = amount.value / Mon
+			target.value = Mon
+			targetRate.value = NumberUtils(rate, 0)
 		}
 	}
 	
 	const getSalesTarget = async (pid) => {
-		const res = await reServer.getSalesTarget(pid, today)
+		const res = radio.value == 0 ? await reServer.getSalesTarget(pid, today) : await reServer.getSalesProfitTarget(pid, today)
 		if (res) {
 			if (res.code === 200) {
 				target.value = res.daysDivide

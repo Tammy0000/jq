@@ -93,7 +93,7 @@
 			await getStoreInfo()
 		}
 		if (index === 2) {
-			storeInfoList.value = [{store: 'A区', num: 20, pid: -1, sid: -10}, {store: 'B区', num: 7, pid: -2, sid: 20}]
+			storeInfoList.value = [{store: 'A区', num: 30, pid: 1, sid: -10}, {store: 'C区', num: 7, pid: 3, sid: 20}]
 		}
 	}
 	

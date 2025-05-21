@@ -47,3 +47,15 @@ export function getDateBefore(dateStr, days) {
 	
 	    return `${yyyy}-${mm}-${dd}`;
 	  }
+
+export function getDaysSinceFirstOfMonth() {
+  const today = new Date();
+  return today.getDate() - 1;
+}
+
+export function getDaysSinceMonday() {
+  const today = new Date();
+  let day = today.getDay(); // 0=周日, 1=周一, ..., 6=周六
+  if (day === 0) day = 7;   // 将周日视为一周的最后一天（第7天）
+  return day - 1;
+}

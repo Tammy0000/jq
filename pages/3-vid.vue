@@ -2,7 +2,7 @@
 	<view class="body">
 		<view class="container">
 			<view>
-				<JqTopShowVue :showRight="true" @handle_Date="getDate"></JqTopShowVue>
+				<JqTopShowVue :showRight="true"></JqTopShowVue>
 			</view>
 			<view class="vid">
 				<view>
@@ -42,13 +42,13 @@
 					<text>库存金额</text>
 					<text>月销量</text>
 				</view>
-				<view class="dataShow-title" style="background-color: #f8f8fa;" v-for="i in 6">
-					<text>大刀肉</text>
-					<text>1</text>
-					<text>2025-01-24</text>
-					<text>7</text>
-					<text>4</text>
-					<text>6</text>
+				<view class="dataShow-title" style="background-color: #f8f8fa;" v-for="(value, key) in dataList" :key="key">
+					<text style="color: #2f9ffe; padding-left: 15rpx;" @click="GoodsInfo(value.goodsid)">{{value.goodsname}}</text>
+					<text>{{value.price}}</text>
+					<text>{{value.invaliddate}}</text>
+					<text>{{value.goodsqty}}</text>
+					<text>{{NumberUtils.toFixedNumber(value.notaxmoney, 2)}}</text>
+					<text>{{value.saleQty}}</text>
 				</view>
 			</view>
 		</view>
@@ -56,16 +56,50 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
-	import {onShow} from '@dcloudio/uni-app'
+	import { ref, watch } from 'vue';
+	import {onShow, onLoad} from '@dcloudio/uni-app'
 	import reServer from '../utils/reServer';
 	import JqTopShowVue from '../components/Jq-TopShow.vue'
+	import { useCounterStore } from '../store/counter';
+	import NumberUtils from '../utils/NumberUtils';
 	
-	onShow(async () => {
-		console.log('rrrr')
-		const res = await reServer.getStockAmount(150925)
-		console.log(res.data)
+	const counter = useCounterStore()
+	const dataList = ref([])
+	
+	onShow (() => {
+		if (dataList.value.length === 0) {
+			getSumInvaGoodIdInfoList()
+		}
 	})
+	
+	watch(() => counter.placepointid, (newValue, oldValue) => {
+		if (counter.placepointid === newValue) return
+		getSumInvaGoodIdInfoList()
+	})
+	
+	const getSumInvaGoodIdInfoList = async () => {
+		const res = await reServer.getSumInvaGoodIdInfoList(counter.placepointid, 0, 90)
+		if (res) {
+			if (res.code === 200) {
+				dataList.value = []
+				dataList.value = res.data
+			}
+		}
+	}
+	
+	const GoodsInfo = async(goodsid) => {
+		const res = await reServer.getGoodsInfoByPidAndGoodsId(counter.placepointid, goodsid)
+		if (res) {
+			if (res.code === 200) {
+				//阻止触发上层事件
+				event.stopPropagation();
+				uni.showModal({
+					content:`商品名: ${res.data.goodsname}\n 生产厂商: ${res.data.factoryname}\n 规格: ${res.data.goodstype}\n 会员价: 0\n 零售价: ${res.data.price}\n 成本价: ${res.data.cbj}\n 新毛利分类: ${res.data.xmlv}`,
+					showCancel:false,
+				})
+			}
+		}
+	}
 	
 	const changeTitleCss = ref('#eeeeee')
 </script>

@@ -1,0 +1,1 @@
+import{c as s,w as a,i as e,o,b as r}from"./index-C0FQHog4.js";import{_ as t}from"./_plugin-vue_export-helper.BCo6x5W8.js";const n=t({},[["render",function(t,n){const c=e;return o(),s(c,{class:"body"},{default:a((()=>[r(c,{class:"container"})])),_:1})}],["__scopeId","data-v-de288bbf"]]);export{n as default};

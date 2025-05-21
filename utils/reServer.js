@@ -15,6 +15,8 @@ export default {
 	getTurnoverDays: async (pid, startTime, endTime) => await requestFast.post('/public/store/view/getTurnoverDays', {pid: pid, startTime: startTime, endTime: endTime}),
 	//获取门店时间内的实收金额
 	getReceivableAmount: async (pid, startTime, endTime) => await requestFast.post('/public/store/view/getActualAmount', {pid: pid, startTime: startTime, endTime: endTime}),
+	//获取门店时间内的毛利金额
+	getGrossProfitRate: async (pid, startTime, endTime) => await requestFast.post('/public/store/view/getGrossProfit', {pid: pid, startTime: startTime, endTime: endTime}),
 	//获取门店30天内断货数量
 	getOutOfStockDays: async (pid, days) => await requestFast.post('/public/store/view/getOutOfStockDays', {pid: pid, days: days}),
 	//获取门店30天内断货率
@@ -47,10 +49,18 @@ export default {
 	getNewGoodsDataInfo: async (pid) => await requestFast.post('/public/store/view/getNewGoodsDataInfo', {pid:pid}),
 	//获取门店时间内的有限期相关信息
 	getSumInvaGoodsidInfo: async (pid, startdays, enddays) => await requestFast.post('/public/store/view/getSumInvaGoodsidInfo', {pid: pid, startdays: startdays, enddays: enddays}),
-	//获取门店指定时间的目标情况
+	//获取门店指定时间的销售目标情况
 	getSalesTarget: async (pid, today) => await requestFast.post('/public/store/view/getSalesTarget', {pid: pid, today: today}),
 	//根据商品名称模糊查询或者根据商品ID查询
 	getProductQuerySummary: async(pid, keyword) => await requestFast.post('/public/store/view/getProductQuerySummary', {pid: pid, keyword: keyword}),
 	//根据商品id查询所有门店库存情况
-	getProductStoreStockList: async(goodsid) => await  requestFast.post('/public/store/view/getProductStoreStockList', {goodsid: goodsid})
+	getProductStoreStockList: async(goodsid) => await  requestFast.post('/public/store/view/getProductStoreStockList', {goodsid: goodsid}),
+	//获取指定时间有效期的商品，查询销量，库存，库存金额
+	getSumInvaGoodIdInfoList: async(pid, startdays, enddays) => await requestFast.post('/public/store/view/getSumInvaGoodIdInfoList', {pid: pid, startdays: startdays, enddays, enddays}),
+	//获取指定门店和商品ID来查询该商品详细信息（包括成本价，新毛利分类等信息）
+	getGoodsInfoByPidAndGoodsId: async(pid, goodsid) => await requestFast.post('/public/store/view/getGoodsInfoByPidAndGoodsId', {pid: pid, goodsid: goodsid}),
+	//获取门店指定时间的毛利目标情况
+	getSalesProfitTarget: async (pid, today) => await requestFast.post('/public/store/view/getSalesProfitTarget', {pid: pid, today: today}),
+	// 获取指定门店指定时间的月目标情况（包括毛利目标，销售目标等目标情况）
+	getSalesTargetByPid: async (pid, today) => await requestFast.post('/public/store/view/getSalesTargetByPid', {pid: pid, today: today}),
 }
